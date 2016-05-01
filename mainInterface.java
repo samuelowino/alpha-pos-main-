@@ -14,15 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -30,13 +25,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -61,26 +49,21 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author user
  */
+import salesinventory.ProductSalesTransactions;
+import salesinventory.DrugInventoryTransactions;
 import com.toedter.calendar.JDateChooser;
 import customerTracking.addCustomerInformation;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.print.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import salesinventory.editItemsDetailsFrame;
+import salesinventory.EditItemsDetailsFrame;
 import staffandEmployeeManagement.AddNewEmployee;
 import staffandEmployeeManagement.clockInClockOutTransactions;
 import java.beans.PropertyChangeEvent;
@@ -90,14 +73,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 import javax.swing.table.DefaultTableModel;
-import salesinventory.salesTableModel;
+import salesinventory.SalesTableModel;
 
-public final class mainInterface extends JFrame {
+public final class MainInterface extends JFrame {
 
+    private static DrugInventoryTransactions drugInventoryTransactions;
     private static JButton generateSaleReportsByDateButton;
     private static Connection con;
     private static Statement st;
-    private static  mainInterface mainUI;
     private static JLabel drugInventoryLabel;
     private static JMenu suppliers;
     private static DefaultTableModel suppliersModel;
@@ -129,7 +112,7 @@ public final class mainInterface extends JFrame {
     private static JMenuItem salesReportsByID;
     private static JMenuItem salesReportsBySalesRep;
     private static JMenuItem salesReportsByDate;
-    private static salesinventory.salesTableModel saleTableModel;
+    private static salesinventory.SalesTableModel saleTableModel;
     private static Double itemsPrices;
     private static JPanel addNewEmplyeeViewPanel;
     private static JPanel processPayMentsViewPanel;
@@ -312,7 +295,6 @@ public final class mainInterface extends JFrame {
     private static JMenuItem advancedViewMenuItem;
     //--------------------------------------------------------------------------------------------------------------------------------------------------------
     private static JPanel loansPanelView;
-    private static editItemsDetailsFrame loanEditScreen;
     private static JPanel loanTopPanel;
     private static JPanel loanTableComponentsPanel;
     private static JPanel loanTableOnlypanel;
@@ -474,7 +456,7 @@ public final class mainInterface extends JFrame {
     private static JLabel statementLineTenLabel;
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
-    private static editItemsDetailsFrame editScreen;
+    private static EditItemsDetailsFrame editScreen;
     public static JPanel topPanel;
     public static JPanel tableComponentsPanel;
     public static JPanel tableOnlypanel;
@@ -655,14 +637,16 @@ public final class mainInterface extends JFrame {
     private static JPanel addNewTaskPanel;
     private static JMenuItem viewSuppliers;
     private static LocalDate printDate;
-
-    public mainInterface(Boolean visible) {
+    private static ProductSalesTransactions productSalesTransactions;
+    
+    public MainInterface(Boolean visible) {
         super("Apha Retaurant POS");
         setSize(getMaximumSize().width, getMaximumSize().height);
         setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.WHITE);
-       
+        productSalesTransactions = new ProductSalesTransactions();
+        drugInventoryTransactions = new DrugInventoryTransactions();
         printDate = LocalDate.now();
         generateSaleReportsByDateButton = new JButton("Generate");
         drugInventoryLabel = new JLabel("Drugs Inventory");
@@ -673,7 +657,7 @@ public final class mainInterface extends JFrame {
         viewSuppliers = new JMenuItem("View Suppliers");
         suppliersInfoViewPanel = new JPanel(null);
         addNewUserPanelView = new JPanel(null);
-        saleTableModel = new salesTableModel();
+        saleTableModel = new SalesTableModel();
         addItemToSalesButton = new JButton("ADD");
         reportsMenu = new JMenu("Reports");
         stockMenu = new JMenu("Stock");
@@ -1041,7 +1025,7 @@ public final class mainInterface extends JFrame {
         selectQtyLabel = new JLabel("Select Quantity");
 
 //        String[][] samplePaymtData = {{amountPaidField.getText(), changeField.getText(), totalNetField.getText(), payModeComboBox.getSelectedItem().toString()},};
-        selectCategoryCombo = new JComboBox<String>(new salesinventory.DrugInventoryTransactions().getCategories());
+        selectCategoryCombo = new JComboBox<String>(drugInventoryTransactions.getCategories());
         selectQtySpinner = new JSpinner();
         amountReceivedWindow = new JTextArea();
         addMoreCashButton = new JButton("ADD");
@@ -1293,13 +1277,12 @@ public final class mainInterface extends JFrame {
         }
         );
 
-        printButtonPay.addActionListener(
-                new ActionListener() {
+        printButtonPay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 try {
                     itemsPaymentTablePay.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Goodnew Pharmacy Recpt:"), new MessageFormat(printDate+"   "+new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
-                    new salesinventory.productSalesTransactions().deleteTransactionData();
+                    productSalesTransactions.deleteTransactionData();
                     amountReceivedWindow.setText("");
                     amountPaidField.setText("0.00");
                     changeField.setText("0.00");
@@ -1307,7 +1290,7 @@ public final class mainInterface extends JFrame {
                     totalNetField.setText("0.00");
                     saleTableModel.fireTableDataChanged();
                 } catch (PrinterException ex) {
-                    Logger.getLogger(mainInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -1333,7 +1316,7 @@ public final class mainInterface extends JFrame {
                 }
 //                        selectItemsCombo.addItem(file);
                 //   String[] drugNames = new salesinventory.DrugsInventoryTransactions().getDrugNamesList(selectCategoryCombo.getSelectedItem().toString());
-                selectItemsCombo = new JComboBox<>(new salesinventory.DrugInventoryTransactions().getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()));
+                selectItemsCombo = new JComboBox<>(drugInventoryTransactions.getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()));
                 //selectItemsCombo = new JComboBox<>(new salesinventory.DrugsInventoryTransactions().getDrugNamesList("painkillers"));
                 selectItemsCombo.setBounds(720, 25, 200, 40);
                 processPayMentsViewPanel.add(selectItemsCombo);
@@ -1549,12 +1532,6 @@ public final class mainInterface extends JFrame {
                     }
                 }
         );
-
-        //---------------------------------------------------------------------------------------------------------------------------------------------------
-    
-
-    
-
     //---------------------------------------------------------------------------------------------------------------------------------------
     newEmployeeNewEmpfileChooser  = new JFileChooser();
     newEmployeebrowseForImageButton  = new JButton("Browse");
@@ -2282,7 +2259,6 @@ shiftsTableScrollPane.getViewport().setBackground(Color.WHITE);
         {"Action", "ID", "Aquisition Date", "Balance", "Decrease", "Description", "Increase", "isCleared", "Tel:", "Loan ID", "Original Amount"},
         {"Action", "ID", "Aquisition Date", "Balance", "Decrease", "Description", "Increase", "isCleared", "Tel:", "Loan ID", "Original Amount"},};
     addNewLoanItemButton  = new JButton("Add New Loan Record");
-    loanEditScreen  = new editItemsDetailsFrame();
     printLoanButton  = new JButton("Print");
     searchLoanButton  = new JButton("");
     loanTotalLabel  = new JLabel("Total: 15 Records Found");
@@ -2354,19 +2330,8 @@ loanTableScrollPane.getViewport().setBackground(Color.WHITE);
     inventorySortMethodCombo  = new JComboBox<>(inventoryViewSortMethods);
     inventoryItemsTable  = new JTable(stockTabelModel);
     getInventoryColumnNames();
-    /*   new salesinventory.editItemsDetailsFrame ().closeButton.addActionListener(
-    
-    new ActionListener() {
-    
-    @Override
-    public void actionPerformed(ActionEvent event) {
-    
-    stockTabelModel.fireTableDataChanged();
-    }
-    }
-    );*/
-        inventoryTableScrollPane  = new JScrollPane(inventoryItemsTable);
-inventoryTableScrollPane.getViewport().setBackground(Color.WHITE);
+    inventoryTableScrollPane  = new JScrollPane(inventoryItemsTable);
+    inventoryTableScrollPane.getViewport().setBackground(Color.WHITE);
     inventoryViewsaddNewItemButton.setBounds (400, 20, 150, 30);
     drugInventoryLabel.setBounds(30,15,250,40);
     inventoryPrintButton.setBounds (570, 20, 100, 30);
@@ -2425,7 +2390,7 @@ inventoryTableScrollPane.getViewport().setBackground(Color.WHITE);
     String[][] sampleItemsData = {{"Action", "ID", "Code", "Item Name", "Qty", "Production Cost", "Price Each", "Discount %", "Total"},
     {"Action", "ID", "Code", "Item Name", "Qty", "Production Cost", "Price Each", "Discount %", "Total"}};
     addNewItemButton  = new JButton("Add New Item");
-    editScreen  = new editItemsDetailsFrame();
+    editScreen  = new EditItemsDetailsFrame();
     printButton  = new JButton("Print");
     searchButton  = new JButton("");
     totalLabel  = new JLabel("Total:"+" Records Found");
@@ -2831,9 +2796,9 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
     );
     
     statementLineOneLabel  = new JLabel("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
-    statementLineTwoLabel  = new JLabel("Total Sales = "+new salesinventory.DrugInventoryTransactions().getTotalSales());
+    statementLineTwoLabel  = new JLabel("Total Sales = "+drugInventoryTransactions.getTotalSales());
     statementLineThreeLabel  = new JLabel("Total Vat = 93.96");
-    statementLineFourLabel  = new JLabel("Total Profit ="+ new salesinventory.DrugInventoryTransactions().getTotalprofitFromSales());
+    statementLineFourLabel  = new JLabel("Total Profit ="+drugInventoryTransactions.getTotalprofitFromSales());
     statementLineFiveLabel  = new JLabel("Pharmacy  Co. L.t.d");
     statementLineSixLabel  = new JLabel("Pharmacy Name.com Customer Service 850 Kakamega");
     statementLineSevenLabel  = new JLabel("Kakamega-Mumias Road ,CA, 94066");
@@ -2936,14 +2901,13 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
     searchTextFieldMouseListener(InvoicesearchField);
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ordersViewPanel  = new JPanel(null);
-    printReportButton.addActionListener(
-            new ActionListener(){
+    printReportButton.addActionListener(new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent event){
                     try {
                         inventoryTable.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Inventory Report"), new MessageFormat(printDate+"    "+new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
                     } catch (PrinterException ex) {
-                        Logger.getLogger(mainInterface.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -3801,7 +3765,7 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
             if (option == JOptionPane.YES_OPTION) {
                 //display log in
                 //  setVisible(false);
-                new logInAndAuthentication().setVisible(true);
+                new LogInAndAuthentication().setVisible(true);
             } else if (option == JOptionPane.NO_OPTION) {
                 //Do nothing
             } else if (option == JOptionPane.CANCEL_OPTION) {
@@ -3847,9 +3811,8 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
         new ActionListener() {
             @Override
         public void actionPerformed(ActionEvent event) {
-                editItemsDetailsFrame editDetails = new editItemsDetailsFrame();
-            editDetails.setVisible(true);
-            editDetails.saveButton.addActionListener(
+            editScreen.setVisible(true);
+            editScreen.saveButton.addActionListener(
                     new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
@@ -3891,8 +3854,8 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
             LocalDate lastMonth = LocalDate.of(today.getYear(),month,today.getDayOfMonth());
             LocalDate llastMonth = LocalDate.of(today.getYear(),month,lastMonth.getMonth().minLength());
             statementLineOneLabel.setText("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
-            statementLineFourLabel.setText("Total Profit ="+ new salesinventory.DrugInventoryTransactions().getTotalprofitFromSales());
-            statementLineTwoLabel.setText("Total Sales = "+new salesinventory.DrugInventoryTransactions().getTotalSales());
+            statementLineFourLabel.setText("Total Profit ="+drugInventoryTransactions.getTotalprofitFromSales());
+            statementLineTwoLabel.setText("Total Sales = "+drugInventoryTransactions.getTotalSales());
             statementLineOneLabel.setText("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
             splitPane.remove(splitPane.getRightComponent());
             repaint();
@@ -4197,7 +4160,7 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
         new ActionListener() {
             @Override
         public void actionPerformed(ActionEvent event) {
-                loanEditScreen.setVisible(true);
+                editScreen.setVisible(true);
         }
     }
 
@@ -4226,7 +4189,7 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
         new ActionListener() {
             @Override
         public void actionPerformed(ActionEvent event) {
-                new salesinventory.editItemsDetailsFrame().setVisible(true);
+                editScreen.setVisible(true);
         }
     }
 
@@ -4294,24 +4257,22 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
     }
 
     );
-    addItemToSalesButton.addActionListener (
-             
-        new ActionListener() {
+    addItemToSalesButton.addActionListener (new ActionListener() {
             @Override
         public void actionPerformed(ActionEvent event) {
 
-                if (new salesinventory.DrugInventoryTransactions().reduceDrugQtyFromStock(new salesinventory.DrugInventoryTransactions().getAvailabelDrugQty(selectItemsCombo.getSelectedItem().toString()), new Integer(selectQtySpinner.getValue().toString()), selectItemsCombo.getSelectedItem().toString()) == true) {
-                Double price = new Double(new salesinventory.productSalesTransactions().getItemPrice(selectItemsCombo.getSelectedItem().toString()));
+                if (drugInventoryTransactions.reduceDrugQtyFromStock(drugInventoryTransactions.getAvailabelDrugQty(selectItemsCombo.getSelectedItem().toString()), new Integer(selectQtySpinner.getValue().toString()), selectItemsCombo.getSelectedItem().toString()) == true) {
+                Double price = new Double(productSalesTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
                 int qty = new Integer(selectQtySpinner.getValue().toString());
                 Double total = price * qty;
-                new salesinventory.productSalesTransactions().addParticularSaleData(selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), new salesinventory.productSalesTransactions().getItemPrice("23"), total.toString());
-                itemsPrices = new Double(new salesinventory.DrugInventoryTransactions().getItemPrice(selectItemsCombo.getSelectedItem().toString()));
+                productSalesTransactions.addParticularSaleData(selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), productSalesTransactions.getItemPrice("23"), total.toString());
+                itemsPrices = new Double(drugInventoryTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
                 Double quty = new Double(selectQtySpinner.getValue().toString());
                 itemsPrices *= quty;
                 itemsPrices += new Double(amountDueField.getText());
                 amountDueField.setText(itemsPrices.toString());
                 Double profit = itemsPrices - 34;
-                new salesinventory.DrugInventoryTransactions().insertTransactionIntoInvoiceTable("3456", selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), total.toString(), profit.toString(),payModeComboBox.getSelectedItem().toString(), amountReceivedWindow.getText(), changeField.getText().toString(), "Admin");
+                drugInventoryTransactions.insertTransactionIntoInvoiceTable("3456", selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), total.toString(), profit.toString(),payModeComboBox.getSelectedItem().toString(), amountReceivedWindow.getText(), changeField.getText().toString(), "Admin");
             }
         }
     }
@@ -4329,8 +4290,8 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
                     LocalDate lastMonth = LocalDate.of(today.getYear(),month,today.getDayOfMonth());
                     LocalDate llastMonth = LocalDate.of(today.getYear(),month,lastMonth.getMonth().minLength());
                     statementLineOneLabel.setText("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
-                    statementLineFourLabel.setText("Total Profit ="+ new salesinventory.DrugInventoryTransactions().getTodaysProfit());
-                    statementLineTwoLabel.setText("Total Sales = "+new salesinventory.DrugInventoryTransactions().getTodaysSales());
+                    statementLineFourLabel.setText("Total Profit ="+drugInventoryTransactions.getTodaysProfit());
+                    statementLineTwoLabel.setText("Total Sales = "+drugInventoryTransactions.getTodaysSales());
                 }
             }
     );
@@ -4346,8 +4307,8 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
                     LocalDate lastMonth = LocalDate.of(today.getYear(),month,today.getDayOfMonth());
                     LocalDate llastMonth = LocalDate.of(today.getYear(),month,lastMonth.getMonth().minLength());
                     getThisMonthsSales();
-                    statementLineFourLabel.setText("Total Profit ="+ new salesinventory.DrugInventoryTransactions().getTotalProfitFromSalesByDate(llastMonth, LocalDate.now()));
-                    statementLineTwoLabel.setText("Total Sales = "+new salesinventory.DrugInventoryTransactions().getTotalSalesByDate(llastMonth, LocalDate.now()));
+                    statementLineFourLabel.setText("Total Profit ="+drugInventoryTransactions.getTotalProfitFromSalesByDate(llastMonth, LocalDate.now()));
+                    statementLineTwoLabel.setText("Total Sales = "+drugInventoryTransactions.getTotalSalesByDate(llastMonth, LocalDate.now()));
                     statementLineOneLabel.setText("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
                 }
             }
@@ -4390,8 +4351,8 @@ employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
                     LocalDate startDate = LocalDate.of(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
                 
                     getSalesByDate(startDate, endDate);
-                    statementLineFourLabel.setText("Total Profit ="+new salesinventory.DrugInventoryTransactions().getTotalProfitFromSalesByDate(startDate, endDate));
-                    statementLineTwoLabel.setText("Total Sales = "+new salesinventory.DrugInventoryTransactions().getTotalSalesByDate(startDate, endDate));
+                    statementLineFourLabel.setText("Total Profit ="+drugInventoryTransactions.getTotalProfitFromSalesByDate(startDate, endDate));
+                    statementLineTwoLabel.setText("Total Sales = "+drugInventoryTransactions.getTotalSalesByDate(startDate, endDate));
                     statementLineOneLabel.setText("Total: "+invoiceTableModel.getRowCount()+"  Records  Found");
                     
                 }

@@ -1,5 +1,9 @@
 package alpha;
 
+/**
+ * This class handles user log in,authentication and password decryption +++
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -12,7 +16,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.util.*;
 
-public class logInAndAuthentication extends JFrame {
+public class LogInAndAuthentication extends JFrame {
 
     private static Stack<String> emailsInThe_DB;
     private static String enteredUserName;
@@ -33,7 +37,7 @@ public class logInAndAuthentication extends JFrame {
     private static JLabel allRightsLabel;
     private static JLabel authenticationLabel;
 
-    public logInAndAuthentication() {
+    public LogInAndAuthentication() {
         super("Sign In");
         setSize(getMaximumSize().width, getMaximumSize().height);
         setLocation(0, 0);
@@ -271,7 +275,7 @@ public class logInAndAuthentication extends JFrame {
                         setVisible(false);
                         // inboxFrame.setVisible(true);
                         //  inboxFrame.setTitle(userName);
-                        new alpha.mainInterface(true);
+                        new alpha.MainInterface(true);
                     }
 
                 } catch (SQLException e) {
@@ -322,7 +326,6 @@ public class logInAndAuthentication extends JFrame {
             public void run() {
 
                 authenticationLabel.setBackground(Color.white);
-
                 authenticationLabel.setText(errorMessage);
 
             }
