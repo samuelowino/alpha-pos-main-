@@ -13,6 +13,6 @@ public class InititializerClass {
     
     public static void main(String[] args) {
         
-        mainInterface main = new mainInterface(true);
+        MainInterface main = new MainInterface(true);
     }
 }
