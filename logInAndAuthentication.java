@@ -103,18 +103,11 @@ public class LogInAndAuthentication extends JFrame {
         add(credentialsPanel);
         add(copyrightInfoPanel);
         repaint();
-       // setVisible(true);
+        //setVisible(true);
         addFieldsFocusListener(passwordField);
         addFieldsFocusListener(usernameField);
 
-        signInButton.addActionListener(
-                new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                AuthenticateUser();
-            }
-        }
-        );
+        signInButton.addActionListener( e -> AuthenticateUser());
 
         copyrightInfoPanel.addMouseListener(
                 new MouseListener() {
@@ -264,7 +257,7 @@ public class LogInAndAuthentication extends JFrame {
                         //editorPane.setForeground(Color.red);
                         Toolkit.getDefaultToolkit().beep();
                         showMessage("\t\tWRONG PASSWORD");
-//else if (passwordsStack.search(enteredPassword) >= 0)
+                        //else if (passwordsStack.search(enteredPassword) >= 0)
                     } else if (enteredPassword.equals("samuelowino")) {
 
                         showMessage("SUCCESSFULL");
