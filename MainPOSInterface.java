@@ -10,19 +10,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -67,7 +63,7 @@ import salesinventory.SalesTableModel;
 import staffandEmployeeManagement.AddNewEmployee;
 import staffandEmployeeManagement.clockInClockOutTransactions;
 
-public class MainPOSInterface extends JFrame {
+public  class MainPOSInterface extends JFrame {
 
     private static CustomerTransaction customerTransactions;
     private static DrugInventoryTransactions drugInventoryTransactions;
@@ -630,10 +626,10 @@ public class MainPOSInterface extends JFrame {
 
     public MainPOSInterface(Boolean visible) {
         super("Apha Pharmacy POS");
-        setSize(getMaximumSize().width, getMaximumSize().height);
-        setLocation(0, 0);
+        getContentPane().setSize(getMaximumSize().width, getMaximumSize().height);
+        getContentPane().setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.WHITE);
+        setBackground(Color.WHITE);
         customerTransactions = new CustomerTransaction();
         productSalesTransactions = new ProductSalesTransactions();
         drugInventoryTransactions = new DrugInventoryTransactions();
@@ -843,14 +839,10 @@ public class MainPOSInterface extends JFrame {
         addFieldsFocusListener(patientsNextVistField);
         addFieldsFocusListener(patientsPatientsDiagnosisField);
         patientsAddPrescriptionDetailsButton.addActionListener( e->  new systemsandmanagementrinterface.patientsDiagnosedDrugsDetails().setVisible(true));
-        patientsUpdateUserDetailsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                patientsLastVisitField.getDate();
-               customerTransactions.insertCustomerDataToDb(patientsFirstNameField.getText(), patientsLastNameField.getText(), patientsPhoneField.getText(), patientsEmailField.getText(), patientsPrescriptionDetailsField.getText(), patientsLastVisitField.getDate().toString(), patientsNextVistField.getDate().toString(), patientsPatientsDiagnosisField.getText());
-            }
-        }
-        );
+        patientsUpdateUserDetailsButton.addActionListener((ActionEvent event) -> {
+            patientsLastVisitField.getDate();
+            customerTransactions.insertCustomerDataToDb(patientsFirstNameField.getText(), patientsLastNameField.getText(), patientsPhoneField.getText(), patientsEmailField.getText(), patientsPrescriptionDetailsField.getText(), patientsLastVisitField.getDate().toString(), patientsNextVistField.getDate().toString(), patientsPatientsDiagnosisField.getText());
+        });
 
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         String[] suppliersInformationSortOptions = {"First Name", "Last Name", "Phone", "Email", "Prescription Details", "Last Visit", "Next Appointment", "Diagnosis"};
@@ -864,7 +856,7 @@ public class MainPOSInterface extends JFrame {
         customerPatientSearchButton.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\searchIcon.jpg"));
         customerPatientSortByButton = new JButton("Sort By:");
         customerPatiientsSearchField = new JTextField("Search...");
-        customerPatientSortMethodCombo = new JComboBox<String>(suppliersInformationSortOptions);
+        customerPatientSortMethodCombo = new JComboBox<>(suppliersInformationSortOptions);
         customerPatientTable = new JTable(customerModel);
         customerPatientTable.setEnabled(false);
         setCustomersTableColumnNames();
@@ -923,19 +915,7 @@ public class MainPOSInterface extends JFrame {
             splitPane.setRightComponent(addNewPatientCustomerViewPanel);
             repaint();
         });
-        patientCustomerPrintButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    customerPatientTable.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Customer Records"), new MessageFormat(printDate + "   " + new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
-                    JOptionPane.showMessageDialog(null, "Print succefull!");
-                } catch (PrinterException e) {
-                    JOptionPane.showMessageDialog(null, "Unable To print:" + e.getMessage());
-                }
-            }
-        }
-        );
-
+        patientCustomerPrintButton.addActionListener( e -> printJTable(customerPatientTable, "Customer Records"));
         //New Order Screen
         //---------------------------------------------------------------------------------------------------------------------------------------------------------
         selectCategoryLabel = new JLabel("Select category");
@@ -943,7 +923,7 @@ public class MainPOSInterface extends JFrame {
         selectQtyLabel = new JLabel("Select Quantity");
 
 //        String[][] samplePaymtData = {{amountPaidField.getText(), changeField.getText(), totalNetField.getText(), payModeComboBox.getSelectedItem().toString()},};
-        selectCategoryCombo = new JComboBox<String>(drugInventoryTransactions.getCategories());
+        selectCategoryCombo = new JComboBox<>(drugInventoryTransactions.getCategories());
         selectQtySpinner = new JSpinner();
         amountReceivedWindow = new JTextArea();
         addMoreCashButton = new JButton("ADD");
@@ -977,7 +957,7 @@ public class MainPOSInterface extends JFrame {
         changeLabel.setForeground(Color.WHITE);
         totalNetLabel.setForeground(Color.WHITE);
         String[] paymentModes = {"Cash", "Check", "Visa", "Master Card/EuroCard", "Voucher"};
-        payModeComboBox = new JComboBox<Object>(paymentModes);
+        payModeComboBox = new JComboBox<>(paymentModes);
         amountDueField = new JTextField();
         amountPaidField = new JTextField();
         changeField = new JTextField();
@@ -1500,9 +1480,9 @@ public class MainPOSInterface extends JFrame {
                 try {
                     newEmployeeNewEmpfileChooser.showSaveDialog(null);
                     newEmployeeNewEmpfileChooser.getSelectedFile();
-                    Image image;
-                    File file = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
-                    image =  ImageIO.read(file);
+                    Image imagee;
+                    File filee = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
+                    imagee =  ImageIO.read(file);
                     newEmployeeprofileImageLabel.setIcon(new ImageIcon(image));
 
                 } catch (IOException ex) {
@@ -1946,7 +1926,7 @@ public class MainPOSInterface extends JFrame {
         searchButton.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\searchIcon.jpg"));
         sortButton = new JButton("Sort By:");
         searchField2 = new JTextField("Search...");
-        sortMethodCombo = new JComboBox<String>(sortMethods);
+        sortMethodCombo = new JComboBox<>(sortMethods);
         itemsTable = new JTable();
         tableScrollPane = new JScrollPane(itemsTable);
         tableScrollPane.getViewport().setBackground(Color.WHITE);
@@ -1995,7 +1975,7 @@ public class MainPOSInterface extends JFrame {
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         String staffCatogories[] = {"Genitor", "Cashier", "Sales "};
         DAO = new clockInClockOutTransactions();
-        selectCategory = new JComboBox<String>(staffCatogories);
+        selectCategory = new JComboBox<>(staffCatogories);
         restaurantNameLabel = new JLabel("Name of Pharmacy");
         restaurantNameLabel.setFont(new Font("STENCIL", Font.BOLD, 36));
         enterButton = new JButton("C\nL\nE\nA\nR");
@@ -2148,7 +2128,7 @@ public class MainPOSInterface extends JFrame {
         EmployeeSearchField = new JTextField("Search...");
         empSortByButton = new JButton("Sort By:");
         String[] shiftsSortCategories = {"ID", "From", "To", "Title", "Description", "Date"};
-        sortByCombo = new JComboBox<String>(shiftsSortCategories);
+        sortByCombo = new JComboBox<>(shiftsSortCategories);
         taskListTable = new JTable();
         employeeTableScrollPane = new JScrollPane(taskListTable);
         employeeTableScrollPane.getViewport().setBackground(Color.WHITE);
@@ -2453,7 +2433,7 @@ public class MainPOSInterface extends JFrame {
         paymentButton = new JButton("Payment");
         searchField2 = new JTextField();
         String[] searchCategoryItems = {"All", "Code", "Item Name", "Qty", "Price", "Total"};
-        searcByCategoryComboBox = new JComboBox<String>(searchCategoryItems);
+        searcByCategoryComboBox = new JComboBox<>(searchCategoryItems);
         salesTable = new JTable();
         salesTable.setEnabled(false);
         salesTable.setEnabled(false);
@@ -2857,14 +2837,12 @@ public class MainPOSInterface extends JFrame {
                 splitPane.setRightComponent(inventoryViewPanel);
                 repaint();
         });
-       
         addnewItemMenuItem.addActionListener( e -> {
             editScreen.setVisible(true);
             editScreen.saveButton.addActionListener(event ->  {});
                         
         });
         viewSuppliers.addActionListener( e -> {
-                
                 getSuppliersData();
                 suppliersPatientTotalLabel.setText("Total: " + suppliersModel.getRowCount() + "  Records Found");
                 splitPane.remove(splitPane.getRightComponent());
@@ -2874,10 +2852,8 @@ public class MainPOSInterface extends JFrame {
         });
         // inveicePanel
         salesReportsByCategory.addActionListener( e -> {
-               
                 getsalesInvoice();
                 LocalDate today = LocalDate.now();
-
                 int month = today.getMonth().getValue() - 1;
                 LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
                 LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
@@ -2944,7 +2920,6 @@ public class MainPOSInterface extends JFrame {
                 }
         });
         todaysSalesButton.addActionListener( e -> {
-                
                 getTodaySales();
                 LocalDate today = LocalDate.now();
                 int month = today.getMonth().getValue() - 1;
@@ -2956,7 +2931,6 @@ public class MainPOSInterface extends JFrame {
         
         });
         last30DaysReportsButton.addActionListener( e -> {
-        
                 LocalDate today = LocalDate.now();
                 int month = today.getMonth().getValue() - 1;
                 LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
@@ -2966,7 +2940,6 @@ public class MainPOSInterface extends JFrame {
                 statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSalesByDate(llastMonth, LocalDate.now()));
                 statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
         }
-        
         );
         generateSaleReportsByDateButton.addActionListener( event ->{
                 Calendar calendarInstance = Calendar.getInstance();
@@ -2981,7 +2954,7 @@ public class MainPOSInterface extends JFrame {
                 statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
         
         } );
-        add(splitPane);
+        getContentPane().add(splitPane);
         setJMenuBar(menuBar);
         repaint();
         setVisible(visible);
@@ -3004,7 +2977,6 @@ public class MainPOSInterface extends JFrame {
     }
 
     public final void setCustomersTableColumnNames() {
-
         customerModel.addColumn("First Name");
         customerModel.addColumn("Last Name");
         customerModel.addColumn("Phone");
@@ -3015,7 +2987,7 @@ public class MainPOSInterface extends JFrame {
         customerModel.addColumn("Diagnosis");
     }
 
-    private final void connectToDatabase() {
+    public final void connectToDatabase() {
         try {
             String dsn = "Medi";
             //Load Driver
@@ -3215,7 +3187,6 @@ public class MainPOSInterface extends JFrame {
         stockTabelModel.addColumn("Status");
 
     }
-
     public final void getSuplliersColumnHeaders() {
 
         suppliersModel.addColumn("Suppliers Name");
@@ -3227,7 +3198,6 @@ public class MainPOSInterface extends JFrame {
         suppliersModel.addColumn("Paid");
         suppliersModel.addColumn("Balance");
     }
-
     public final  void getSuppliersData() {
 
         try {
@@ -3254,7 +3224,6 @@ public class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Suppliers Data:\n [" + e.getMessage() + "]");
         }
     }
-
     public final void getSalesColumnHeaders() {
 
         invoiceTableModel.addColumn("Invoice ID");
@@ -3266,7 +3235,6 @@ public class MainPOSInterface extends JFrame {
         invoiceTableModel.addColumn("Pay Mode");
         invoiceTableModel.addColumn("Served By");
     }
-
     public void getSalesByDate(LocalDate startDate, LocalDate endDate) {
 
         try {
@@ -3292,7 +3260,6 @@ public class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
         }
     }
-
     public void getsalesInvoice() {
         try {
             int row = invoiceTableModel.getRowCount();
@@ -3317,7 +3284,6 @@ public class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
         }
     }
-
     public void getTodaySales() {
         try {
             int row = invoiceTableModel.getRowCount();
@@ -3351,7 +3317,6 @@ public class MainPOSInterface extends JFrame {
         splitPane.setRightComponent(newReplaceablePanel);
         repaint();
     }
-
     public void getThisMonthsSales() {
 
         try {
