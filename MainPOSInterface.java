@@ -1,69 +1,25 @@
 package alpha;
 
 import com.toedter.calendar.JDateChooser;
-import customerTracking.addCustomerInformation;
-import customerTracking.CustomerTransaction;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.print.PrinterException;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.MessageFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import salesinventory.DrugInventoryTransactions;
-import salesinventory.EditItemsDetailsFrame;
-import salesinventory.ProductSalesTransactions;
-import salesinventory.SalesTableModel;
-import staffandEmployeeManagement.AddNewEmployee;
-import staffandEmployeeManagement.clockInClockOutTransactions;
+import customerTracking.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.print.*;
+import java.io.*;
+import java.sql.*;
+import java.text.*;
+import java.time.*;
+import java.util.*;
+import java.util.List;
+import java.util.logging.*;
+import javax.imageio.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.table.*;
+import salesinventory.*;
+import staffandEmployeeManagement.*;
 
-public  class MainPOSInterface extends JFrame {
+public class MainPOSInterface extends JFrame {
 
     private static CustomerTransaction customerTransactions;
     private static DrugInventoryTransactions drugInventoryTransactions;
@@ -507,7 +463,6 @@ public  class MainPOSInterface extends JFrame {
     private static JMenu editMenu;
     private static JMenu actionMenu;
     private static JMenu viewMenu;
-    private static JMenu inventoryMenu;
     private static JMenu purchasingMenu;
     private static JMenu configurationMenu;
     private static JMenu helpMenu;
@@ -555,10 +510,6 @@ public  class MainPOSInterface extends JFrame {
     private static JMenuItem endOfDayMenuItem;
     private static JMenuItem exitmenuItem;
     private static JMenuItem clockInClockOutMenuItem;
-    //menuItems --> InventoryMenu
-    private static JMenuItem physicalInventoryMenuItem;
-    private static JMenuItem inventoryCategoriesMenuItem;
-    //menuItems --> PurchasingMenu
     private static JMenuItem purchaseMenuOrders;
     private static JMenuItem purchaseVoucherMenuItem;
     private static JMenuItem returnVoucherManuItem;
@@ -626,8 +577,8 @@ public  class MainPOSInterface extends JFrame {
 
     public MainPOSInterface(Boolean visible) {
         super("Apha Pharmacy POS");
-        getContentPane().setSize(getMaximumSize().width, getMaximumSize().height);
-        getContentPane().setLocation(0, 0);
+        setSize(getMaximumSize().width, getMaximumSize().height);
+        setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
         customerTransactions = new CustomerTransaction();
@@ -688,7 +639,8 @@ public  class MainPOSInterface extends JFrame {
         suppliersPatiientsSearchField = new JTextField("Search...");
         suppliersPatientSortMethodCombo = new JComboBox<>(customerInformationSortOptions);
         suppliersPatientTable = new JTable(suppliersModel);
-        getSuplliersColumnHeaders();
+        List<String> suppliersTableColumnNames = Arrays.asList("Suppliers Name", "Contact Person", "Region", "Contact", "Email", "Amount Due", "Paid", "Balance");
+        setTableColumnHeaders(suppliersTableColumnNames, suppliersModel);
         suppliersPatientTableScrollPane = new JScrollPane(suppliersPatientTable);
         suppliersPatientTableScrollPane.getViewport().setBackground(Color.WHITE);
         suppliersSortByButton.setForeground(Color.WHITE);
@@ -735,14 +687,14 @@ public  class MainPOSInterface extends JFrame {
         suppliersInfoViewPanel.add(viewsuppliersTableOnlypanel);
         // animateGreypanels(suppliersTableComponentsPanel);
         searchTextFieldMouseListener(suppliersPatiientsSearchField);
-        addNewsuppliersCustomerButton.addActionListener( e -> suppliersPatientsEditScreen.setVisible(true));
-        suppliersPrintButton.addActionListener( event -> {
-             try {
-                    suppliersPatientTable.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Suppliers Records"), new MessageFormat(printDate + "   " + new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
-                    JOptionPane.showMessageDialog(null, "Print succefull!");
-                } catch (PrinterException e) {
-                    JOptionPane.showMessageDialog(null, "Unable To print:" + e.getMessage());
-                }
+        addNewsuppliersCustomerButton.addActionListener(e -> suppliersPatientsEditScreen.setVisible(true));
+        suppliersPrintButton.addActionListener(event -> {
+            try {
+                suppliersPatientTable.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Suppliers Records"), new MessageFormat(printDate + "   " + new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
+                JOptionPane.showMessageDialog(null, "Print succefull!");
+            } catch (PrinterException e) {
+                JOptionPane.showMessageDialog(null, "Unable To print:" + e.getMessage());
+            }
         });
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         patientsTopAddUserPanel = new JPanel(null);
@@ -838,7 +790,7 @@ public  class MainPOSInterface extends JFrame {
         addFieldsFocusListener(patientsLastVisitField);
         addFieldsFocusListener(patientsNextVistField);
         addFieldsFocusListener(patientsPatientsDiagnosisField);
-        patientsAddPrescriptionDetailsButton.addActionListener( e->  new systemsandmanagementrinterface.patientsDiagnosedDrugsDetails().setVisible(true));
+        patientsAddPrescriptionDetailsButton.addActionListener(e -> new systemsandmanagementrinterface.patientsDiagnosedDrugsDetails().setVisible(true));
         patientsUpdateUserDetailsButton.addActionListener((ActionEvent event) -> {
             patientsLastVisitField.getDate();
             customerTransactions.insertCustomerDataToDb(patientsFirstNameField.getText(), patientsLastNameField.getText(), patientsPhoneField.getText(), patientsEmailField.getText(), patientsPrescriptionDetailsField.getText(), patientsLastVisitField.getDate().toString(), patientsNextVistField.getDate().toString(), patientsPatientsDiagnosisField.getText());
@@ -852,14 +804,15 @@ public  class MainPOSInterface extends JFrame {
         customerInformationLabel.setForeground(Color.WHITE);
         patientCustomerPrintButton = new JButton("Print");
         customerPatientSearchButton = new JButton("");
-        customerPatientTotalLabel = new JLabel("Total:" + customerModel.getRowCount() + " Records Found");
+        
         customerPatientSearchButton.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\searchIcon.jpg"));
         customerPatientSortByButton = new JButton("Sort By:");
         customerPatiientsSearchField = new JTextField("Search...");
         customerPatientSortMethodCombo = new JComboBox<>(suppliersInformationSortOptions);
         customerPatientTable = new JTable(customerModel);
         customerPatientTable.setEnabled(false);
-        setCustomersTableColumnNames();
+        List<String> customerTableColumnHeaders = Arrays.asList("First Name", "Last Name", "Phone", "Email", "Prescription", "Last Visit", "Next Appointment", "Diagnosis");
+        setTableColumnHeaders(customerTableColumnHeaders, customerModel);
         connectToDatabase();
         customerPatientTableScrollPane = new JScrollPane(customerPatientTable);
         customerPatientTableScrollPane.getViewport().setBackground(Color.WHITE);
@@ -882,7 +835,7 @@ public  class MainPOSInterface extends JFrame {
         customersPatientsTopPanel.setBounds(100, 0, 1000, 70);
         customerPatientTableComponentsPanel.setBounds(100, 100, 1000, 90);
         customerpatientTableOnlypanel.setBounds(100, 190, 1000, 450);
-        customerPatientTotalLabel.setBounds(450, 2, 200, 30);
+        
         customerPatientTableComponentsPanel.setBorder(new LineBorder(Color.BLUE));
         customerpatientTableOnlypanel.setBorder(new LineBorder(Color.BLUE));
         customersPatientsTopPanel.setBorder(new LineBorder(Color.BLUE));
@@ -899,7 +852,7 @@ public  class MainPOSInterface extends JFrame {
         customerPatientTableComponentsPanel.add(customerPatiientsSearchField);
         customerPatientTableComponentsPanel.add(customerPatientSortByButton);
         customerPatientTableComponentsPanel.add(customerPatientSortMethodCombo);
-        customerpatientTableOnlypanel.add(customerPatientTotalLabel);
+        
         customerpatientTableOnlypanel.add(customerPatientTableScrollPane);
         addFieldsFocusListener(customerPatientSortMethodCombo);
         addFieldsFocusListener(customerPatiientsSearchField);
@@ -915,7 +868,7 @@ public  class MainPOSInterface extends JFrame {
             splitPane.setRightComponent(addNewPatientCustomerViewPanel);
             repaint();
         });
-        patientCustomerPrintButton.addActionListener( e -> printJTable(customerPatientTable, "Customer Records"));
+        patientCustomerPrintButton.addActionListener(e -> printJTable(customerPatientTable, "Customer Records"));
         //New Order Screen
         //---------------------------------------------------------------------------------------------------------------------------------------------------------
         selectCategoryLabel = new JLabel("Select category");
@@ -1150,65 +1103,65 @@ public  class MainPOSInterface extends JFrame {
         updatePayTextArea(nineButtonPay);
         updatePayTextArea(zeroButtonPay);
 
-        deleteButtonPay.addActionListener( e -> {
+        deleteButtonPay.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(null, "Do you want to cancel this transaction?");
-                if (option == JOptionPane.NO_OPTION || option == JOptionPane.CANCEL_OPTION) {
-                } else if (option == JOptionPane.OK_OPTION) {
-                    JOptionPane.showMessageDialog(null, "Transaction Cancelled!");
-                    amountReceivedWindow.setText("");
-                    changeField.setText("0.00");
-                    totalNetField.setText("0.00");
-                    amountPaidField.setText("0.00");
-                    amountDueField.setText("0.00");
-                }
+            if (option == JOptionPane.NO_OPTION || option == JOptionPane.CANCEL_OPTION) {
+            } else if (option == JOptionPane.OK_OPTION) {
+                JOptionPane.showMessageDialog(null, "Transaction Cancelled!");
+                amountReceivedWindow.setText("");
+                changeField.setText("0.00");
+                totalNetField.setText("0.00");
+                amountPaidField.setText("0.00");
+                amountDueField.setText("0.00");
+            }
         });
-        printButtonPay.addActionListener( e -> {
+        printButtonPay.addActionListener(e -> {
             try {
-                    itemsPaymentTablePay.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Goodnew Pharmacy Recpt:"), new MessageFormat(printDate + "   " + new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
-                    productSalesTransactions.deleteTransactionData();
-                    amountReceivedWindow.setText("");
-                    amountPaidField.setText("0.00");
-                    changeField.setText("0.00");
-                    amountDueField.setText("0.00");
-                    totalNetField.setText("0.00");
-                    saleTableModel.fireTableDataChanged();
-                } catch (PrinterException ex) {
-                    Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                itemsPaymentTablePay.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat("Goodnew Pharmacy Recpt:"), new MessageFormat(printDate + "   " + new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("name")));
+                productSalesTransactions.deleteTransactionData();
+                amountReceivedWindow.setText("");
+                amountPaidField.setText("0.00");
+                changeField.setText("0.00");
+                amountDueField.setText("0.00");
+                totalNetField.setText("0.00");
+                saleTableModel.fireTableDataChanged();
+            } catch (PrinterException ex) {
+                Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
-        closeButtonPay.addActionListener( e -> {
+        closeButtonPay.addActionListener(e -> {
             splitPane.remove(splitPane.getRightComponent());
             repaint();
             clockInAndOutViewPanel.setBackground(Color.white);
             splitPane.setRightComponent(clockInAndOutViewPanel);
         });
-        selectCategoryCombo.addActionListener( e -> {
-              if (selectItemsCombo != null) {
-                    processPayMentsViewPanel.remove(selectItemsCombo);
-                    repaint();
-                }
-                //   String[] drugNames = new salesinventory.DrugsInventoryTransactions().getDrugNamesList(selectCategoryCombo.getSelectedItem().toString());
-                selectItemsCombo = new JComboBox<>(drugInventoryTransactions.getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()));
-                //selectItemsCombo = new JComboBox<>(new salesinventory.DrugsInventoryTransactions().getDrugNamesList("painkillers"));
-                selectItemsCombo.setBounds(720, 25, 200, 40);
-                processPayMentsViewPanel.add(selectItemsCombo);
+        selectCategoryCombo.addActionListener(e -> {
+            if (selectItemsCombo != null) {
+                processPayMentsViewPanel.remove(selectItemsCombo);
                 repaint();
+            }
+            //   String[] drugNames = new salesinventory.DrugsInventoryTransactions().getDrugNamesList(selectCategoryCombo.getSelectedItem().toString());
+            selectItemsCombo = new JComboBox<>(drugInventoryTransactions.getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()));
+            //selectItemsCombo = new JComboBox<>(new salesinventory.DrugsInventoryTransactions().getDrugNamesList("painkillers"));
+            selectItemsCombo.setBounds(720, 25, 200, 40);
+            processPayMentsViewPanel.add(selectItemsCombo);
+            repaint();
         });
-        clearFieldButtonPay.addActionListener( e -> {
+        clearFieldButtonPay.addActionListener(e -> {
             amountReceivedWindow.setText("");
             amountPaidField.setText("0.00");
             changeField.setText("0.00");
             amountDueField.setText("0.00");
             totalNetField.setText("0.00");
         });
-        addMoreCashButton.addActionListener( e -> {
-                
+        addMoreCashButton.addActionListener(e -> {
+
             amountPaidField.setText(amountReceivedWindow.getText() + ".00");
             changeField.setText("" + getChange(new Double(amountReceivedWindow.getText() + ".00"), new Double(amountDueField.getText())));
             totalNetField.setText("" + getNetAmount(getChange(new Double(amountReceivedWindow.getText() + ".00"), new Double(amountDueField.getText())), new Double(amountDueField.getText())));
             amountReceivedWindow.setText("");
 
-                repaint();
+            repaint();
         });
         //---------------------------------------------------------------------------------------------------------------------------------------------
         //Add task view properties code
@@ -1373,8 +1326,8 @@ public  class MainPOSInterface extends JFrame {
         vatRegNumberField.setText(new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("VATRegNo"));
         footerTextArea.setText(new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("footer"));
         webAddressField.setText(new managedocuments.CompanyInfoTransactions().getCompanyInformation().get("webAddress"));
-        updateSettingButton.addActionListener( e -> {
-             new managedocuments.CompanyInfoTransactions().addCompanyInformationToDB(companyField.getText(), companyAddressArea.getText(), phoneNumberField.getText(), settingsEmailField.getText(), webAddressField.getText(), vatField.getText(), vatRegNumberField.getText(), footerTextArea.getText());
+        updateSettingButton.addActionListener(e -> {
+            new managedocuments.CompanyInfoTransactions().addCompanyInformationToDB(companyField.getText(), companyAddressArea.getText(), phoneNumberField.getText(), settingsEmailField.getText(), webAddressField.getText(), vatField.getText(), vatRegNumberField.getText(), footerTextArea.getText());
         });
         //---------------------------------------------------------------------------------------------------------------------------------------
         newEmployeeNewEmpfileChooser = new JFileChooser();
@@ -1475,21 +1428,21 @@ public  class MainPOSInterface extends JFrame {
         addFieldsFocusListener(newEmployeeemployeeIDField);
         addFieldsFocusListener(newEmployeepassword);
         addFieldsFocusListener(newEmployeeconfirmPasswordField);
-        newEmployeebrowseForImageButton.addActionListener( event -> {
-             newEmployeeprofileImageLabel.setText("");
-                try {
-                    newEmployeeNewEmpfileChooser.showSaveDialog(null);
-                    newEmployeeNewEmpfileChooser.getSelectedFile();
-                    Image imagee;
-                    File filee = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
-                    imagee =  ImageIO.read(file);
-                    newEmployeeprofileImageLabel.setIcon(new ImageIcon(image));
+        newEmployeebrowseForImageButton.addActionListener(event -> {
+            newEmployeeprofileImageLabel.setText("");
+            try {
+                newEmployeeNewEmpfileChooser.showSaveDialog(null);
+                newEmployeeNewEmpfileChooser.getSelectedFile();
+                Image imagee;
+                File filee = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
+                imagee = ImageIO.read(file);
+                newEmployeeprofileImageLabel.setIcon(new ImageIcon(image));
 
-                } catch (IOException ex) {
-                    Logger.getLogger(AddNewEmployee.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NullPointerException e) {
-                    JOptionPane.showMessageDialog(null, "No File Selected...");
-                }
+            } catch (IOException ex) {
+                Logger.getLogger(AddNewEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "No File Selected...");
+            }
         });
         //---------------------------------------------------------------------------------------------------------------------------------------
         topAddUserPanel = new JPanel(null);
@@ -1739,7 +1692,7 @@ public  class MainPOSInterface extends JFrame {
         addFieldsFocusListener(ordersViewSortByCombo);
         addFieldsFocusListener(ordersViewSearchField);
         searchTextFieldMouseListener(ordersViewSearchField);
-        ordersViewPrintButton.addActionListener( e -> printJTable(ordersDetailsViewTabel,"Orders Records"));
+        ordersViewPrintButton.addActionListener(e -> printJTable(ordersDetailsViewTabel, "Orders Records"));
         topShiftsPanel = new JPanel(null);
         shiftsLabelPanel = new JPanel(null);
         shiftsTablePanel = new JPanel(null);
@@ -1798,7 +1751,7 @@ public  class MainPOSInterface extends JFrame {
         addFieldsFocusListener(sortShiftsByCombo);
         addFieldsFocusListener(ShiftsSearchField);
         searchTextFieldMouseListener(ShiftsSearchField);
-        printShiftsButton.addActionListener( e -> printJTable(customersTabel,"Employee Shifts"));
+        printShiftsButton.addActionListener(e -> printJTable(customersTabel, "Employee Shifts"));
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         String[] loanSortMethods = {"Action", "ID", "Aquisition Date", "Balance", "Decrease", "Description", "Increase", "isCleared", "Tel:", "Loan ID", "Original Amount"};
         addNewLoanItemButton = new JButton("Add New Loan Record");
@@ -1970,8 +1923,8 @@ public  class MainPOSInterface extends JFrame {
         itemsManagementPanel.add(tableComponentsPanel);
         itemsManagementPanel.add(tableOnlypanel);
         searchTextFieldMouseListener(searchField2);
-        addNewItemButton.addActionListener( e -> editScreen.setVisible(true));
-        printButton.addActionListener( e -> printJTable(itemsTable, "Items Report"));
+        addNewItemButton.addActionListener(e -> editScreen.setVisible(true));
+        printButton.addActionListener(e -> printJTable(itemsTable, "Items Report"));
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         String staffCatogories[] = {"Genitor", "Cashier", "Sales "};
         DAO = new clockInClockOutTransactions();
@@ -2099,22 +2052,22 @@ public  class MainPOSInterface extends JFrame {
         updateTextArea(eightButton);
         updateTextArea(nineButton);
         updateTextArea(bottomButton);
-        clockOutButton.addActionListener( e -> {
-              int employeePin = new Integer(passwordorIdField.getText());
-              //JOptionPane.showMessageDialog(null, "The Empployee pin picked is" + employeePin, "iPOS", JOptionPane.INFORMATION_MESSAGE);
-              DAO.clockOut(employeePin);
+        clockOutButton.addActionListener(e -> {
+            int employeePin = new Integer(passwordorIdField.getText());
+            //JOptionPane.showMessageDialog(null, "The Empployee pin picked is" + employeePin, "iPOS", JOptionPane.INFORMATION_MESSAGE);
+            DAO.clockOut(employeePin);
         });
-        clockInButton.addActionListener( event -> {
-             try {
+        clockInButton.addActionListener(event -> {
+            try {
 
-                    int employeePin = new Integer(passwordorIdField.getText());
-                    // JOptionPane.showMessageDialog(null, "The Empployee pin picked is" + employeePin, "iPOS", JOptionPane.INFORMATION_MESSAGE);
-                    DAO.clockIn(employeePin);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Invalid Employee Number");
-                }
+                int employeePin = new Integer(passwordorIdField.getText());
+                // JOptionPane.showMessageDialog(null, "The Empployee pin picked is" + employeePin, "iPOS", JOptionPane.INFORMATION_MESSAGE);
+                DAO.clockIn(employeePin);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid Employee Number");
+            }
         });
-        enterButton.addActionListener( e -> passwordorIdField.setText("") );
+        enterButton.addActionListener(e -> passwordorIdField.setText(""));
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         topEmployeesPanel = new JPanel(null);
         tableMainPanel = new JPanel(null);
@@ -2179,7 +2132,9 @@ public  class MainPOSInterface extends JFrame {
         reportPanel = new JPanel(null);
         invoiceTableModel = new DefaultTableModel();
         inventoryTable = new JTable(invoiceTableModel);
-        getSalesColumnHeaders();
+        //Set invoice table column headers
+        List<String> salesTableColumnHeaders = Arrays.asList("Invoice ID", "Sale Date", "Sold Item", "Qty", "Total", "Profit", "Pay Mode", "Served By");
+        setTableColumnHeaders(salesTableColumnHeaders, invoiceTableModel);
         reportPanelScrollPane = new JScrollPane(inventoryTable);
         reportPanelScrollPane.getViewport().setBackground(Color.WHITE);
         reportPanelScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -2191,7 +2146,7 @@ public  class MainPOSInterface extends JFrame {
         InvoicesearchField = new JTextField("Search...");
         //  startDateField = new JTextField("Start Date");
         startDateField = new JDateChooser();
-         endDateField = new JDateChooser();
+        endDateField = new JDateChooser();
         statementLineOneLabel = new JLabel("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
         statementLineTwoLabel = new JLabel("Total Sales = " + drugInventoryTransactions.getTotalSales());
         statementLineThreeLabel = new JLabel("Total Vat = 93.96");
@@ -2271,7 +2226,7 @@ public  class MainPOSInterface extends JFrame {
         searchTextFieldMouseListener(InvoicesearchField);
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         ordersViewPanel = new JPanel(null);
-        printReportButton.addActionListener( e -> printJTable(inventoryTable, "Inventory Report"));
+        printReportButton.addActionListener(e -> printJTable(inventoryTable, "Inventory Report"));
         ordersViewPanel.setBackground(Color.white);
         PointofSaleLabel = new JMenu("Point of Sale");
         foodItemsPanel = new JPanel();
@@ -2293,8 +2248,6 @@ public  class MainPOSInterface extends JFrame {
         tempPanel = new JPanel();
 
         tempPanel.setBackground(Color.RED);
-        physicalInventoryMenuItem = new JMenuItem("Physical Inventory");
-        inventoryCategoriesMenuItem = new JMenuItem("Inventory Categories");
         popUpmenu = new JPopupMenu();
         newOrderMenu = new JMenuItem("Sale");
         printNotificationMenuItem = new JMenuItem("Print Notification");
@@ -2360,7 +2313,6 @@ public  class MainPOSInterface extends JFrame {
         editMenu = new JMenu("Edit");
         actionMenu = new JMenu("Action");
         viewMenu = new JMenu("View");
-        inventoryMenu = new JMenu("Inventory");
         purchasingMenu = new JMenu("Purchasing");
         configurationMenu = new JMenu("Configuration");
         helpMenu = new JMenu("Help");
@@ -2480,7 +2432,6 @@ public  class MainPOSInterface extends JFrame {
         editMenu.setForeground(Color.WHITE);
         actionMenu.setForeground(Color.WHITE);
         viewMenu.setForeground(Color.WHITE);
-        inventoryMenu.setForeground(Color.WHITE);
         purchasingMenu.setForeground(Color.WHITE);
         configurationMenu.setForeground(Color.WHITE);
         helpMenu.setForeground(Color.WHITE);
@@ -2491,7 +2442,6 @@ public  class MainPOSInterface extends JFrame {
         customersMenu.setForeground(Color.WHITE);
         adminMenu.setForeground(Color.WHITE);
         emailAddressMenu.setForeground(Color.WHITE);
-        inventoryCategoriesMenuItem.setForeground(Color.WHITE);
 //        menuBar.add(Box.createVerticalGlue());
         editMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
         itemsMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
@@ -2508,7 +2458,6 @@ public  class MainPOSInterface extends JFrame {
         helpMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
         reportsMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
         customersMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
-        inventoryMenu.setFont(new Font("New Times Roman", Font.BOLD, 20));
         reports.setForeground(Color.WHITE);
         users.setForeground(Color.WHITE);
         leftPanel.setLayout(null);
@@ -2584,7 +2533,7 @@ public  class MainPOSInterface extends JFrame {
 
         adminMenu.add(Box.createHorizontalStrut(200));
         // adminMenu.add(profileMenuItem);
-        
+
         adminMenu.add(taskMenuItem);
         adminMenu.add(settingsMenuitem);
         adminMenu.add(logOutMenuItem);
@@ -2691,24 +2640,11 @@ public  class MainPOSInterface extends JFrame {
         newOrderMenu.setBackground(Color.WHITE);
         salesReportsMenu.setBackground(Color.WHITE);
         //PrepareMenuItems --> InventoryMenu
-        physicalInventoryMenuItem = new JMenuItem("Stock");
-        inventoryCategoriesMenuItem = new JMenuItem("Inventory Categories");
         stockMenu.add(addnewItemMenuItem);
-        stockMenu.add(physicalInventoryMenuItem);
         stockMenu.add(manageItemMenuItem);
         addnewItemMenuItem.setBackground(Color.WHITE);
-        physicalInventoryMenuItem.setBackground(Color.WHITE);
         manageItemMenuItem.setBackground(Color.WHITE);
-        physicalInventoryMenuItem.setBackground(Color.WHITE);
-        inventoryCategoriesMenuItem.setBackground(Color.WHITE);
         //add menu Items to Inventory Menu
-        inventoryMenu.add(Box.createHorizontalStrut(200));
-        inventoryMenu.add(physicalInventoryMenuItem);
-        inventoryMenu.add(Box.createVerticalStrut(20));
-        inventoryMenu.add(Box.createVerticalStrut(20));
-        inventoryMenu.addSeparator();
-        inventoryMenu.add(Box.createVerticalStrut(20));
-        inventoryMenu.add(inventoryCategoriesMenuItem);
         //Set Accelerators for Action Menu MenuItems
         newOrderMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
         printNotificationMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
@@ -2800,7 +2736,6 @@ public  class MainPOSInterface extends JFrame {
         suppliers.add(Box.createHorizontalStrut(200));
         suppliers.add(Box.createVerticalStrut(20));
         suppliers.add(viewSuppliers);
-        menuBar.add(inventoryMenu);
         menuBar.add(suppliers);
         menuBar.add(helpMenu);
         menuBar.add(helpMenu);
@@ -2830,41 +2765,42 @@ public  class MainPOSInterface extends JFrame {
                     break;
             }
         });
-        manageItemMenuItem.addActionListener( e -> {
-                retrieveInventoryData();
-                inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
-                splitPane.remove(splitPane.getRightComponent());
-                splitPane.setRightComponent(inventoryViewPanel);
-                repaint();
+        manageItemMenuItem.addActionListener(e -> {
+            retrieveInventoryData();
+            inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
+            splitPane.remove(splitPane.getRightComponent());
+            splitPane.setRightComponent(inventoryViewPanel);
+            repaint();
         });
-        addnewItemMenuItem.addActionListener( e -> {
+        addnewItemMenuItem.addActionListener(e -> {
             editScreen.setVisible(true);
-            editScreen.saveButton.addActionListener(event ->  {});
-                        
+            editScreen.saveButton.addActionListener(event -> {
+            });
+
         });
-        viewSuppliers.addActionListener( e -> {
-                getSuppliersData();
-                suppliersPatientTotalLabel.setText("Total: " + suppliersModel.getRowCount() + "  Records Found");
-                splitPane.remove(splitPane.getRightComponent());
-                repaint();
-                suppliersInfoViewPanel.setBackground(Color.WHITE);
-                splitPane.setRightComponent(suppliersInfoViewPanel);
+        viewSuppliers.addActionListener(e -> {
+            getSuppliersData();
+            suppliersPatientTotalLabel.setText("Total: " + suppliersModel.getRowCount() + "  Records Found");
+            splitPane.remove(splitPane.getRightComponent());
+            repaint();
+            suppliersInfoViewPanel.setBackground(Color.WHITE);
+            splitPane.setRightComponent(suppliersInfoViewPanel);
         });
         // inveicePanel
-        salesReportsByCategory.addActionListener( e -> {
-                getsalesInvoice();
-                LocalDate today = LocalDate.now();
-                int month = today.getMonth().getValue() - 1;
-                LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
-                LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
-                statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
-                statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalprofitFromSales());
-                statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSales());
-                statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
-                splitPane.remove(splitPane.getRightComponent());
-                repaint();
-                inveicePanel.setBackground(Color.WHITE);
-                splitPane.setRightComponent(inveicePanel);
+        salesReportsByCategory.addActionListener(e -> {
+            getsalesInvoice();
+            LocalDate today = LocalDate.now();
+            int month = today.getMonth().getValue() - 1;
+            LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
+            LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
+            statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
+            statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalprofitFromSales());
+            statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSales());
+            statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
+            splitPane.remove(splitPane.getRightComponent());
+            repaint();
+            inveicePanel.setBackground(Color.WHITE);
+            splitPane.setRightComponent(inveicePanel);
         });
         //Replce Right split pane views
         newNoticeMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewTaskPanel));
@@ -2880,6 +2816,9 @@ public  class MainPOSInterface extends JFrame {
         shiftMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(shiftsViewPanel));
         manageCustomersMenuItem.addActionListener(event -> {
             retrieveCustomerData();
+            customerPatientTotalLabel = new JLabel("Total:" + customerModel.getRowCount() + " Records Found");
+            customerPatientTotalLabel.setBounds(450, 2, 200, 30);
+            customerpatientTableOnlypanel.add(customerPatientTotalLabel);
             replaceRightComponentOnSplitPane(viewCustomerInformationDetailsView);
         });
         clientsMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(customersViewPanel));
@@ -2887,10 +2826,6 @@ public  class MainPOSInterface extends JFrame {
         settingsMenuitem.addActionListener(event -> replaceRightComponentOnSplitPane(settingsPanel));
         ordersMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(orderDetailsMainViewPanel));
         inventoryMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(inventoryViewPanel));
-        physicalInventoryMenuItem.addActionListener(event -> {
-            retrieveInventoryData();
-            replaceRightComponentOnSplitPane(inventoryViewPanel);
-        });
         printNotificationMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewTaskPanel));
         paymentButton.addActionListener(event -> replaceRightComponentOnSplitPane(processPayMentsViewPanel));
         newEmployeeMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewEmplyeeViewPanel));
@@ -2903,57 +2838,57 @@ public  class MainPOSInterface extends JFrame {
         inventoryViewsaddNewItemButton.addActionListener(event -> editScreen.setVisible(true));
         inventoryPrintButton.addActionListener(event -> printJTable(inventoryItemsTable, "Inventory Report"));
 
-        addItemToSalesButton.addActionListener( e -> {
-           
-             if (drugInventoryTransactions.reduceDrugQtyFromStock(drugInventoryTransactions.getAvailabelDrugQty(selectItemsCombo.getSelectedItem().toString()), new Integer(selectQtySpinner.getValue().toString()), selectItemsCombo.getSelectedItem().toString()) == true) {
-                    Double price = new Double(productSalesTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
-                    int qty = new Integer(selectQtySpinner.getValue().toString());
-                    Double total = price * qty;
-                    productSalesTransactions.addParticularSaleData(selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), productSalesTransactions.getItemPrice("23"), total.toString());
-                    itemsPrices = new Double(drugInventoryTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
-                    Double quty = new Double(selectQtySpinner.getValue().toString());
-                    itemsPrices *= quty;
-                    itemsPrices += new Double(amountDueField.getText());
-                    amountDueField.setText(itemsPrices.toString());
-                    Double profit = itemsPrices - 34;
-                    drugInventoryTransactions.insertTransactionIntoInvoiceTable("3456", selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), total.toString(), profit.toString(), payModeComboBox.getSelectedItem().toString(), amountReceivedWindow.getText(), changeField.getText(), "Admin");
-                }
+        addItemToSalesButton.addActionListener(e -> {
+
+            if (drugInventoryTransactions.reduceDrugQtyFromStock(drugInventoryTransactions.getAvailabelDrugQty(selectItemsCombo.getSelectedItem().toString()), new Integer(selectQtySpinner.getValue().toString()), selectItemsCombo.getSelectedItem().toString()) == true) {
+                Double price = new Double(productSalesTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
+                int qty = new Integer(selectQtySpinner.getValue().toString());
+                Double total = price * qty;
+                productSalesTransactions.addParticularSaleData(selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), productSalesTransactions.getItemPrice("23"), total.toString());
+                itemsPrices = new Double(drugInventoryTransactions.getItemPrice(selectItemsCombo.getSelectedItem().toString()));
+                Double quty = new Double(selectQtySpinner.getValue().toString());
+                itemsPrices *= quty;
+                itemsPrices += new Double(amountDueField.getText());
+                amountDueField.setText(itemsPrices.toString());
+                Double profit = itemsPrices - 34;
+                drugInventoryTransactions.insertTransactionIntoInvoiceTable("3456", selectItemsCombo.getSelectedItem().toString(), selectQtySpinner.getValue().toString(), total.toString(), profit.toString(), payModeComboBox.getSelectedItem().toString(), amountReceivedWindow.getText(), changeField.getText(), "Admin");
+            }
         });
-        todaysSalesButton.addActionListener( e -> {
-                getTodaySales();
-                LocalDate today = LocalDate.now();
-                int month = today.getMonth().getValue() - 1;
-                LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
-                LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
-                statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
-                statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTodaysProfit());
-                statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTodaysSales());
-        
+        todaysSalesButton.addActionListener(e -> {
+            getTodaySales();
+            LocalDate today = LocalDate.now();
+            int month = today.getMonth().getValue() - 1;
+            LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
+            LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
+            statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
+            statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTodaysProfit());
+            statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTodaysSales());
+
         });
-        last30DaysReportsButton.addActionListener( e -> {
-                LocalDate today = LocalDate.now();
-                int month = today.getMonth().getValue() - 1;
-                LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
-                LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
-                getThisMonthsSales();
-                statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalProfitFromSalesByDate(llastMonth, LocalDate.now()));
-                statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSalesByDate(llastMonth, LocalDate.now()));
-                statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
+        last30DaysReportsButton.addActionListener(e -> {
+            LocalDate today = LocalDate.now();
+            int month = today.getMonth().getValue() - 1;
+            LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
+            LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
+            getThisMonthsSales();
+            statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalProfitFromSalesByDate(llastMonth, LocalDate.now()));
+            statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSalesByDate(llastMonth, LocalDate.now()));
+            statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
         }
         );
-        generateSaleReportsByDateButton.addActionListener( event ->{
-                Calendar calendarInstance = Calendar.getInstance();
-                calendarInstance.setTime(endDateField.getDate());
-                LocalDate endDate = LocalDate.of(calendarInstance.get(Calendar.YEAR), calendarInstance.get(Calendar.MONTH) + 1, calendarInstance.get(Calendar.DAY_OF_MONTH));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(startDateField.getDate());
-                LocalDate startDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
-                getSalesByDate(startDate, endDate);
-                statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalProfitFromSalesByDate(startDate, endDate));
-                statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSalesByDate(startDate, endDate));
-                statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
-        
-        } );
+        generateSaleReportsByDateButton.addActionListener(event -> {
+            Calendar calendarInstance = Calendar.getInstance();
+            calendarInstance.setTime(endDateField.getDate());
+            LocalDate endDate = LocalDate.of(calendarInstance.get(Calendar.YEAR), calendarInstance.get(Calendar.MONTH) + 1, calendarInstance.get(Calendar.DAY_OF_MONTH));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDateField.getDate());
+            LocalDate startDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+            getSalesByDate(startDate, endDate);
+            statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTotalProfitFromSalesByDate(startDate, endDate));
+            statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTotalSalesByDate(startDate, endDate));
+            statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
+
+        });
         getContentPane().add(splitPane);
         setJMenuBar(menuBar);
         repaint();
@@ -2968,23 +2903,13 @@ public  class MainPOSInterface extends JFrame {
             public void focusGained(FocusEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
             }
+
             @Override
             public void focusLost(FocusEvent event) {
                 componentObject.setBorder(new LineBorder(Color.black, 1));
             }
         }
         );
-    }
-
-    public final void setCustomersTableColumnNames() {
-        customerModel.addColumn("First Name");
-        customerModel.addColumn("Last Name");
-        customerModel.addColumn("Phone");
-        customerModel.addColumn("Email");
-        customerModel.addColumn("Prescription");
-        customerModel.addColumn("Last Visit");
-        customerModel.addColumn("Next Appointment");
-        customerModel.addColumn("Diagnosis");
     }
 
     public final void connectToDatabase() {
@@ -2998,8 +2923,8 @@ public  class MainPOSInterface extends JFrame {
             st = con.createStatement();
         } catch (SQLException e) {
             System.out.println(e);
-        }catch(ClassNotFoundException e){
-            JOptionPane.showMessageDialog(null,e.getMessage());
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
@@ -3027,7 +2952,7 @@ public  class MainPOSInterface extends JFrame {
                 customerModel.addRow(data);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
     }
@@ -3040,18 +2965,22 @@ public  class MainPOSInterface extends JFrame {
             public void mouseClicked(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
             }
+
             @Override
             public void mouseReleased(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
             }
+
             @Override
             public void mousePressed(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
             }
+
             @Override
             public void mouseEntered(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF")));
             }
+
             @Override
             public void mouseExited(MouseEvent event) {
             }
@@ -3133,7 +3062,7 @@ public  class MainPOSInterface extends JFrame {
         );
     }
 
-    public final  void updateTextArea(final JButton ValueButton) {
+    public final void updateTextArea(final JButton ValueButton) {
         javax.swing.SwingUtilities.invokeLater(() -> {
             ValueButton.addActionListener(event -> {
                 passwordorIdField.append(ValueButton.getText());
@@ -3187,18 +3116,8 @@ public  class MainPOSInterface extends JFrame {
         stockTabelModel.addColumn("Status");
 
     }
-    public final void getSuplliersColumnHeaders() {
 
-        suppliersModel.addColumn("Suppliers Name");
-        suppliersModel.addColumn("Contact Person");
-        suppliersModel.addColumn("Region");
-        suppliersModel.addColumn("Contact");
-        suppliersModel.addColumn("Email");
-        suppliersModel.addColumn("Amount Due");
-        suppliersModel.addColumn("Paid");
-        suppliersModel.addColumn("Balance");
-    }
-    public final  void getSuppliersData() {
+    public final void getSuppliersData() {
 
         try {
 
@@ -3224,17 +3143,7 @@ public  class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Suppliers Data:\n [" + e.getMessage() + "]");
         }
     }
-    public final void getSalesColumnHeaders() {
 
-        invoiceTableModel.addColumn("Invoice ID");
-        invoiceTableModel.addColumn("Sale Date");
-        invoiceTableModel.addColumn("Sold Item");
-        invoiceTableModel.addColumn("Qty");
-        invoiceTableModel.addColumn("Total");
-        invoiceTableModel.addColumn("Profit");
-        invoiceTableModel.addColumn("Pay Mode");
-        invoiceTableModel.addColumn("Served By");
-    }
     public void getSalesByDate(LocalDate startDate, LocalDate endDate) {
 
         try {
@@ -3260,6 +3169,7 @@ public  class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
         }
     }
+
     public void getsalesInvoice() {
         try {
             int row = invoiceTableModel.getRowCount();
@@ -3284,6 +3194,7 @@ public  class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
         }
     }
+
     public void getTodaySales() {
         try {
             int row = invoiceTableModel.getRowCount();
@@ -3317,6 +3228,7 @@ public  class MainPOSInterface extends JFrame {
         splitPane.setRightComponent(newReplaceablePanel);
         repaint();
     }
+
     public void getThisMonthsSales() {
 
         try {
@@ -3355,9 +3267,9 @@ public  class MainPOSInterface extends JFrame {
             JOptionPane.showMessageDialog(null, "Unable To print:" + e.getMessage());
         }
     }
-    
-    public final void changeCursorTypesForMenues(final JMenu menueObject){
-         menueObject.addMouseListener(
+
+    public final void changeCursorTypesForMenues(final JMenu menueObject) {
+        menueObject.addMouseListener(
                 new MouseListener() {
             @Override
             public void mousePressed(MouseEvent event) {
@@ -3391,8 +3303,8 @@ public  class MainPOSInterface extends JFrame {
         }
         );
     }
-    
-    public final void retrieveTableData(DefaultTableModel tableModel,String tableName,String dbTableName) {
+
+    public final void retrieveTableData(DefaultTableModel tableModel, String tableName, String dbTableName) {
         try {
 
             int row = tableModel.getRowCount();
@@ -3402,7 +3314,7 @@ public  class MainPOSInterface extends JFrame {
 
             }
             //Execute query
-            ResultSet ineventoryResults = st.executeQuery("SELECT * FROM "+dbTableName+";");
+            ResultSet ineventoryResults = st.executeQuery("SELECT * FROM " + dbTableName + ";");
 
             //get metadata
             ResultSetMetaData resultSetMetaData = ineventoryResults.getMetaData();
@@ -3417,9 +3329,20 @@ public  class MainPOSInterface extends JFrame {
                 tableModel.addRow(data);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable to Retrieve "+tableName+" Information \n["+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Unable to Retrieve " + tableName + " Information \n[" + e.getMessage());
         }
     }
-    
+
+    /**
+     *
+     * @param columnNames
+     * @param defaultTableModel This method sets the tables column headers using
+     * the list of string passed using a stream pipeline operation
+     */
+    public final void setTableColumnHeaders(List<String> columnNames, DefaultTableModel defaultTableModel) {
+
+        columnNames.stream()
+                .forEach(columnName -> defaultTableModel.addColumn(columnName));
+    }
 
 }

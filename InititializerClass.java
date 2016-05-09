@@ -7,7 +7,7 @@ package alpha;
 
 /**
  *
- * @author user
+ * @author Samuel owino
  */
 public class InititializerClass {
     
