@@ -252,7 +252,7 @@ public class LogInAndAuthentication extends JFrame {
                     //Compare entered password
                     if (!enteredPassword.equals("samuelowino")) {
                         setVisible(true);
-                        passwordField.setBorder(new BevelBorder(BevelBorder.RAISED, Color.RED, Color.RED));
+                        passwordField.setBorder(new BevelBorder(BevelBorder.RAISED, Color.decode("#DC143C"), Color.decode("#DC143C")));
                         //inboxFrame.setVisible(false);
                         //editorPane.setForeground(Color.red);
                         Toolkit.getDefaultToolkit().beep();
@@ -266,9 +266,7 @@ public class LogInAndAuthentication extends JFrame {
                         JOptionPane.showMessageDialog(credentialsPanel, "\tSuccessfull\nWelcom to your account");
                         remove(credentialsPanel);
                         setVisible(false);
-                        // inboxFrame.setVisible(true);
-                        //  inboxFrame.setTitle(userName);
-                        new alpha.MainInterface(true);
+                        MainPOSInterface mainPOSInterface = new alpha.MainPOSInterface(true);
                     }
 
                 } catch (SQLException e) {
