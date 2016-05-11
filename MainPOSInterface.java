@@ -22,6 +22,7 @@ import managedocuments.CompanyInfoTransactions;
 
 public class MainPOSInterface extends JFrame {
 
+    private static EmplyeeDataTransaction employeeDataTransactions;
     private static JMenu logOutMenu;
     private static JLabel companyFooterLabel;
     private static CompanyInfoTransactions companyInformation;
@@ -574,6 +575,7 @@ public class MainPOSInterface extends JFrame {
         setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
+        employeeDataTransactions = new EmplyeeDataTransaction();
         logOutMenu = new JMenu();
         companyInformation = new CompanyInfoTransactions();
         customerTransactions = new CustomerTransaction();
@@ -1429,13 +1431,73 @@ public class MainPOSInterface extends JFrame {
                 newEmployeeNewEmpfileChooser.getSelectedFile();
                 Image imagee;
                 File filee = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
-                imagee = ImageIO.read(file);
-                newEmployeeprofileImageLabel.setIcon(new ImageIcon(image));
+                imagee = ImageIO.read(filee);
+                newEmployeeprofileImageLabel.setIcon(new ImageIcon(imagee));
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unabale to add File...\n" + ex.getMessage());
             } catch (NullPointerException e) {
                 JOptionPane.showMessageDialog(null, "No File Selected...");
+            }
+        });
+        newEmployeeupdateUserDetailsButton.addActionListener(e -> {
+            int status = employeeDataTransactions.addNewEmployee(newEmployeeemployeeIDField.getText(), newEmployeefirstNameField.getText(), newEmployeelastNameField.getText(), newEmployeephoneField.getText(), newEmployeeemailField.getText(), newEmployeeSupervisorField.getText(), newEmployeepassword.getText(), newEmployeeNewEmpfileChooser.getSelectedFile().getPath(),newEmployeeconfirmPasswordField.getText());
+            switch (status) {
+                case EmplyeeDataTransaction.EMPLOYEE_ADDITION_SUCCEFULL:
+                    newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeephoneField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeeemailField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                    newEmployeefirstNameField.setText("");
+                    newEmployeelastNameField.setText("");
+                    newEmployeephoneField.setText("");
+                    newEmployeeemailField.setText("");
+                    newEmployeeSupervisorField.setText("");
+                    newEmployeeemployeeIDField.setText("");
+                    newEmployeepassword.setText("");
+                    newEmployeeconfirmPasswordField.setText("");
+                    break;
+                case EmplyeeDataTransaction.ID_DUPLICATION:
+                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeeemployeeIDField.setForeground(Color.red);
+                    makeFieldForegroundBlack(newEmployeeemployeeIDField);
+                    break;
+                case EmplyeeDataTransaction.PASSWORD_DUPLICATION:
+                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeepassword.setText("");
+                    newEmployeeconfirmPasswordField.setText("");
+                    makeFieldForegroundBlack(newEmployeepassword);
+                    break;
+                case EmplyeeDataTransaction.PASSWORD_CONFIRMATION_FAILED:
+                    newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeepassword.setText("");
+                    newEmployeeconfirmPasswordField.setText("");
+                    makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
+                    break;
+                case EmplyeeDataTransaction.EMPLYEE_ADDITION_FAILED:
+                    newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeephoneField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeeemailField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    makeFieldForegroundBlack(newEmployeefirstNameField);
+                    makeFieldForegroundBlack(newEmployeelastNameField);
+                    makeFieldForegroundBlack(newEmployeephoneField);
+                    makeFieldForegroundBlack(newEmployeeemailField);
+                    makeFieldForegroundBlack(newEmployeeSupervisorField);
+                    makeFieldForegroundBlack(newEmployeeemployeeIDField);
+                    makeFieldForegroundBlack(newEmployeepassword);
+                    makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
+                    break;
+                default:
+                    break;
             }
         });
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -2065,7 +2127,7 @@ public class MainPOSInterface extends JFrame {
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Invalid Employee ID Format");
                 }
-            }else if(!DAO.isIDValid(passwordorIdField.getText())){
+            } else if (!DAO.isIDValid(passwordorIdField.getText())) {
                 JOptionPane.showMessageDialog(null, "Unregistered Employee ID");
             }
         });
@@ -2835,8 +2897,6 @@ public class MainPOSInterface extends JFrame {
             getTodaySales();
             LocalDate today = LocalDate.now();
             int month = today.getMonth().getValue() - 1;
-            LocalDate lastMonth = LocalDate.of(today.getYear(), month, today.getDayOfMonth());
-            LocalDate llastMonth = LocalDate.of(today.getYear(), month, lastMonth.getMonth().minLength());
             statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
             statementLineFourLabel.setText("Total Profit =" + drugInventoryTransactions.getTodaysProfit());
             statementLineTwoLabel.setText("Total Sales = " + drugInventoryTransactions.getTodaysSales());
@@ -3041,7 +3101,7 @@ public class MainPOSInterface extends JFrame {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
+            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Report Data:[" + e.getMessage() + "]");
         }
     }
 
@@ -3066,7 +3126,7 @@ public class MainPOSInterface extends JFrame {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
+            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Report Data:[" + e.getMessage() + "]");
         }
     }
 
@@ -3104,7 +3164,7 @@ public class MainPOSInterface extends JFrame {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Invoice Data:[" + e.getMessage() + "]");
+            JOptionPane.showMessageDialog(null, "Unable to Obtain Sales Report Data:[" + e.getMessage() + "]");
         }
     }
 
@@ -3149,7 +3209,6 @@ public class MainPOSInterface extends JFrame {
                 //menuBar.setBorder(new LineBorder(Color.decode("#F5F5F5"), 5));\
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
-
         }
         );
     }
@@ -3202,4 +3261,35 @@ public class MainPOSInterface extends JFrame {
                 .forEach(columnName -> defaultTableModel.addColumn(columnName));
     }
 
+    public void makeFieldForegroundBlack(JTextField textField) {
+        textField.addMouseListener(
+                new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                textField.setForeground(Color.BLACK);
+                setCursor( new Cursor(Cursor.TEXT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                textField.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                textField.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                textField.setFont( new Font("New Times Roman",Font.BOLD,20));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+               textField.setFont( new Font("New Times Roman",Font.PLAIN,12));
+               setCursor( new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+        );
+    }
 }

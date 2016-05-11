@@ -44,13 +44,13 @@ public class LogInAndAuthentication extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         getContentPane().setBackground(Color.WHITE);
-        emailsInThe_DB = new Stack<String>();
-        passwordsStack = new Stack<String>();
+        emailsInThe_DB = new Stack<>();
+        passwordsStack = new Stack<>();
         authenticationLabel = new JLabel();
-        developedByLabel = new JLabel("Developed By KidiTech softwares");
+        developedByLabel = new JLabel("Developed By Samuel Owino");
         copyrightLabel = new JLabel("Copyright @2015-2016");
         allRightsLabel = new JLabel("All Rights are Reserved");
-        pointOfSaleLabel = new JLabel("Alpha intel-Point Of Sale");
+        pointOfSaleLabel = new JLabel("Alpha Intel-Point Of Sale");
         topSignInPanel = new JPanel();
         credentialsPanel = new JPanel();
         copyrightInfoPanel = new JPanel();
