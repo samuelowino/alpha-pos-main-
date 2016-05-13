@@ -224,18 +224,9 @@ public class LogInAndAuthentication extends JFrame {
             public void run() {
 
                 try {
-
-                    //System.err.println("Authenticate method is executed...");
                     String url = "jdbc:mysql://localhost:3306/gmail";
                     enteredPassword = String.valueOf(passwordField.getPassword());
                     enteredUserName = usernameField.getText();
-                    /**
-                     * System.out.println("The entered email address is " +
-                     * enteredEmailAddress); System.out.println("entered EMAIL
-                     * ADDRESS is" + enteredEmailAddress);
-                     * System.out.println("enterd USER PASSWORD is" +
-                     * enteredPassword);*
-                     */
                     Connection connection = DriverManager.getConnection(url, "root", "");
                     Statement sql_statement = connection.createStatement();
                     String SELECT_QUERY = "SELECT password FROM registration_form WHERE emailAddress = " + enteredUserName;
@@ -243,10 +234,8 @@ public class LogInAndAuthentication extends JFrame {
 
                     while (queryResults.next()) {
                         //add all emails to the eamails stack
-                        System.err.println("line 356 (while loop) is executed");
                         passwordsStack.push(queryResults.getString("password"));
                         userName = queryResults.getString("first_name");
-                        System.err.println("line 359 (while loop) is executed");
                     }
                     //passwordsStack.search(enteredPassword) == -1
                     //Compare entered password

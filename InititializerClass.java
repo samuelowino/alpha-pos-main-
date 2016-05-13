@@ -6,13 +6,12 @@
 package alpha;
 
 /**
- *
- * @author Samuel owino
+ * @author Samuel Owino
  */
 public class InititializerClass {
     
     public static void main(String[] args) {
         
-        MainPOSInterface main = new MainPOSInterface(true);
+        new MainPOSInterface(true);
     }
 }
