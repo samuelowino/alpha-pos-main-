@@ -16,7 +16,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.util.*;
 
-public class LogInAndAuthentication extends JFrame {
+public class LogInAndAuthentication extends JDialog {
 
     private static Stack<String> emailsInThe_DB;
     private static String enteredUserName;
@@ -37,13 +37,12 @@ public class LogInAndAuthentication extends JFrame {
     private static JLabel allRightsLabel;
     private static JLabel authenticationLabel;
 
-    public LogInAndAuthentication() {
-        super("Sign In");
-        setSize(getMaximumSize().width, getMaximumSize().height);
-        setLocation(0, 0);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public LogInAndAuthentication(Boolean visible) {
+        setSize(420, 505);
+        setLocation(500, 100);
         setLayout(null);
         getContentPane().setBackground(Color.WHITE);
+        setModal(true);
         emailsInThe_DB = new Stack<>();
         passwordsStack = new Stack<>();
         authenticationLabel = new JLabel();
@@ -63,8 +62,8 @@ public class LogInAndAuthentication extends JFrame {
         credentialsPanel.setLayout(null);
         copyrightInfoPanel.setLayout(null);
         pointOfSaleLabel.setForeground(Color.white);
-        pointOfSaleLabel.setFont(new Font("New Times Roman", Font.BOLD, 14));
-        userNameLabel.setFont(new Font("New Times Roman", Font.BOLD, 12));
+        pointOfSaleLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 14));
+        userNameLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
         authenticationLabel.setBounds(110, 10, 200, 40);
         developedByLabel.setBounds(100, 10, 360, 40);
         copyrightLabel.setBounds(135, 40, 340, 40);
@@ -74,9 +73,9 @@ public class LogInAndAuthentication extends JFrame {
         passwordLabel.setBounds(10, 110, 200, 40);
         usernameField.setBounds(10, 60, 380, 40);
         userNameLabel.setBounds(10, 10, 100, 40);
-        topSignInPanel.setBounds(430, 50, 400, 50);
-        credentialsPanel.setBounds(430, 100, 400, 290);
-        copyrightInfoPanel.setBounds(430, 400, 400, 120);
+        topSignInPanel.setBounds(2, 0, 400, 50);
+        credentialsPanel.setBounds(2, 50, 400, 290);
+        copyrightInfoPanel.setBounds(2, 345, 400, 120);
         usernameField.setBorder(new LineBorder(Color.decode("#696969"), 1));
         passwordField.setBorder(new LineBorder(Color.decode("#696969"), 1));
         copyrightInfoPanel.setBorder(new LineBorder(Color.decode("#1E90FF")));
@@ -87,7 +86,7 @@ public class LogInAndAuthentication extends JFrame {
         copyrightInfoPanel.setBackground(Color.decode("#F5F5F5"));
         signInButton.setForeground(Color.WHITE);
         signInButton.setBackground(Color.decode("#1E90FF"));
-        signInButton.setFont(new Font("New Times Roman", Font.BOLD, 12));
+        signInButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
         signInButton.setBorder(new LineBorder(Color.decode("#1E90FF")));
         topSignInPanel.add(pointOfSaleLabel);
         credentialsPanel.add(userNameLabel);
@@ -103,7 +102,7 @@ public class LogInAndAuthentication extends JFrame {
         add(credentialsPanel);
         add(copyrightInfoPanel);
         repaint();
-        //setVisible(true);
+        setVisible(visible);
         addFieldsFocusListener(passwordField);
         addFieldsFocusListener(usernameField);
 
@@ -312,6 +311,5 @@ public class LogInAndAuthentication extends JFrame {
         }
         );
     }
-
 }
 

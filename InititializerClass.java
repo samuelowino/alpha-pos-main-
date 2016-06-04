@@ -5,13 +5,21 @@
  */
 package alpha;
 
+import salesinventory.DrugInventoryTransactions;
+
 /**
  * @author Samuel Owino
- */
+ */import javax.swing.*;
 public class InititializerClass {
     
     public static void main(String[] args) {
+        if(DrugInventoryTransactions.getApplicationContext() == 0){
+            new MainPOSInterface(true);
+        }else if(DrugInventoryTransactions.getApplicationContext() == 1){
+            while(true){
+                JOptionPane.showMessageDialog(null,"Connot Connect to Alpha Restaurant POS.sql...");
+            }
+        }
         
-        new MainPOSInterface(true);
     }
 }
