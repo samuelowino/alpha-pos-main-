@@ -5,134 +5,118 @@
  */
 package alpha;
 
-
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.regex.PatternSyntaxException;
 
-public class  InputVerification {
-
-    private static Pattern emailAddressRegex;
-    private static Pattern phoneNumberRegex;
-    private static Pattern passwordRegex;
-    private static Pattern passwordRegexLevelTwo;
-    private static Pattern officialNamesRegex;
-    private static Pattern officialNamesRegexLevelTwo;
-    private static Matcher emailAddressMatcher;
-    private static Matcher phoneNumbersMatcher;
-    private static Matcher passwordStrengthMatcher;
-    private static Matcher passwordStrengthMatcherLevelTwo;
-    private static Matcher officialNamesMatcher;
-    private static Matcher officialNamesMatcherLevelTwo;
-    private static Pattern idMatcher;
-    private static Matcher idPattern;
-    public static  String passwordStrength;
-    public static String message = "";
+public class InputVerification {
 
     public static boolean verifyEmails(Object emailText) {
-        
-        boolean isValid = false;
-        
-        try {
-            
-            String p = "(([a-zA-Z0-9]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]{2,3}+))";
-            String p2 = "([a-zA-Z0-9]+)([.]+)([a-zA-Z0-9]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)([.]+)([a-zA-Z]{2}+)";
-            String p3 = "([a-zA-Z]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)([.]+)([a-zA-Z]{2}+)";
-            String p4 = "([a-zA-Z]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)";
 
-            Pattern pp1 = Pattern.compile(p);
+        try {
+
+            String emailPatternForPersonalAccountsEmails = "(([a-zA-Z0-9]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]{2,3}+))";
+            String emailPatternForInstitutionDormainsEmails = "([a-zA-Z0-9]+)([.]+)([a-zA-Z0-9]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)([.]+)([a-zA-Z]{2}+)";
+            String emailPatternForWebHostingServerSMTPEmails = "([a-zA-Z]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)([.]+)([a-zA-Z]{2}+)";
+            String emailPatternForWeblevelTowSMTPEmails = "([a-zA-Z]+)(@)([a-zA-Z]+)([.]+)([a-zA-Z]+)([.]+)([a-zA-Z]{2}+)";
+
+            Pattern pp1 = Pattern.compile(emailPatternForPersonalAccountsEmails);
             Matcher m1 = pp1.matcher(emailText.toString());
-            Pattern pp2 = Pattern.compile(p2);
+            Pattern pp2 = Pattern.compile(emailPatternForInstitutionDormainsEmails);
             Matcher m2 = pp2.matcher(emailText.toString());
-            Pattern pp3 = Pattern.compile(p3);
+            Pattern pp3 = Pattern.compile(emailPatternForWebHostingServerSMTPEmails);
             Matcher m3 = pp3.matcher(emailText.toString());
-            Pattern pp4 = Pattern.compile(p4);
+            Pattern pp4 = Pattern.compile(emailPatternForWeblevelTowSMTPEmails);
             Matcher m4 = pp4.matcher(emailText.toString());
-            
-            isValid = m1.matches() || m2.matches() || m3.matches() || m4.matches();
-             return isValid;
-            
+
+            return m1.matches() || m2.matches() || m3.matches() || m4.matches();
+
         } catch (Exception e) {
             System.out.println("ERR: " + e.getMessage());
             return false;
         }
-       
+
     }
 
-
-    public static  boolean verifyPhoneNumbers(Object enteredPhoneNumber) {
-
-        phoneNumberRegex = Pattern.compile("\\d*");
-        phoneNumbersMatcher = phoneNumberRegex.matcher(enteredPhoneNumber.toString());
-        boolean isPhoneNumberApproved = false;
-        isPhoneNumberApproved = phoneNumbersMatcher.matches();
-        return isPhoneNumberApproved;
+    public static boolean verifyNumbersOnlyFields(Object enteredString) {
+        
+        Pattern numbersOnlyPattern = Pattern.compile("\\d*");
+        Matcher numbersOnlyMatcher = numbersOnlyPattern.matcher(enteredString.toString());
+        return numbersOnlyMatcher.matches();
     }
 
     public static boolean verifyPasswordStrength(final String enteredPassword) {
 
-        passwordRegex = Pattern.compile("[a-zA-Z]+");
-        passwordRegexLevelTwo = Pattern.compile("[0-9]+");
-        passwordStrengthMatcher = passwordRegex.matcher(enteredPassword);
-        passwordStrengthMatcherLevelTwo = passwordRegexLevelTwo.matcher(enteredPassword);
-        boolean isPasswordApproved = false;
-        
+        String passwordStrength = "";
+        String message = "";
+        Pattern passwordRegex = Pattern.compile("[a-zA-Z]+");
+        Pattern passwordRegexLevelTwo = Pattern.compile("[0-9]+");
+        Matcher passwordStrengthMatcher = passwordRegex.matcher(enteredPassword);
+        Matcher passwordStrengthMatcherLevelTwo = passwordRegexLevelTwo.matcher(enteredPassword);
 
         if (passwordStrengthMatcher.find() && passwordStrengthMatcherLevelTwo.find()) {
 
-            isPasswordApproved = true;
             passwordStrength = "100% STRONG!!";
+            return  true;
 
         } else if (!passwordStrengthMatcher.find() && !passwordStrengthMatcherLevelTwo.find()) {
-            isPasswordApproved = false;
+          
             passwordStrength = "4% WEAK";
             message = "Upper case and lowercase characters required!";
+            return false;
 
         } else if (!passwordStrengthMatcher.find()) {
-            isPasswordApproved = false;
+           
             passwordStrength = "40% WEAK!!";
             message = "Upper case and lowercase characters required!";
+            return false;
 
         } else if (!passwordStrengthMatcherLevelTwo.find()) {
 
-            isPasswordApproved = false;
             passwordStrength = "60%";
             message = "A digit between 0-9 required";
+            return false;
+        }else{
+            return false;
         }
 
-        return isPasswordApproved;
     }
 
-    public static Boolean verifyUserTextOnlyFields(Object firstNames) {
+    public static Boolean verifyTextOnlyFields(Object firstNames) {
 
-        officialNamesRegex = Pattern.compile("[a-zA-Z ]+");
-        officialNamesMatcher = officialNamesRegex.matcher(firstNames.toString());
-        officialNamesRegexLevelTwo = Pattern.compile("[^0-9]+");
-        officialNamesMatcherLevelTwo = officialNamesRegexLevelTwo.matcher(firstNames.toString());
-        boolean isNameApproved = false;
+        Pattern textOnlyPattern = Pattern.compile("[a-zA-Z ]+");
+        Matcher textOnlyMatcher = textOnlyPattern.matcher(firstNames.toString());
+        return textOnlyMatcher.matches();
+    }
 
-        if (officialNamesMatcher.matches() && officialNamesMatcherLevelTwo.matches()) {
-            isNameApproved = true;
-        } else if (!officialNamesMatcher.matches() || !officialNamesMatcherLevelTwo.matches()) {
-            isNameApproved = false;
-        } 
-        return isNameApproved;
+    public boolean passwordConfirmation(String enteredPassword, String confirmedPassword) {
+
+        return enteredPassword.equals(confirmedPassword);
+
+    }
+
+    public static boolean verifiyNumbersWithTex(Object ID) {
+        Pattern IDPattern = Pattern.compile("[a-zA-Z0-9]*");
+        Matcher IDMatcher = IDPattern.matcher(ID.toString());
+        return IDMatcher.matches();
+
+    }
+
+    public static boolean verifyWebAddress(Object webAddress) {
+        Pattern webAddressPattern = Pattern.compile("[a-zA-Z0-9:\\.//]*");
+        Matcher webAddressMatcher = webAddressPattern.matcher(webAddress.toString());
+        return webAddressMatcher.matches();
+    }
+
+    public static boolean verifyAddress(Object physicalAddress) {
+        Pattern addressPattern = Pattern.compile("[a-zA-Z0-9 ]*");
+        Matcher addressMatcher = addressPattern.matcher(physicalAddress.toString());
+        return addressMatcher.matches();
     }
     
-    public boolean passwordConfirmation(String enteredPassword,String confirmedPassword){
-        
-        boolean isPasswordsSame = false;
-        isPasswordsSame = enteredPassword.equals(confirmedPassword);
-        return isPasswordsSame;
-    }
-    
-    public  static boolean verifiyID(Object ID){
-        boolean isIDValid = false;
-        idMatcher = Pattern.compile("[a-zA-Z0-9]*");
-        idPattern = idMatcher.matcher(ID.toString());
-        isIDValid = idPattern.matches();
-        return isIDValid;
+    public static boolean verifyNamesWithInitials(Object nameWithInitials){
+        Pattern fullNamesWithInititlsPattern = Pattern.compile("[a-zA-Z\\. ]*");
+        Matcher fullNamesWithInitialsMatcher = fullNamesWithInititlsPattern.matcher(nameWithInitials.toString());
+        return fullNamesWithInitialsMatcher.matches();
     }
 
 }
-
