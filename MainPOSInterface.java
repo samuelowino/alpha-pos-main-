@@ -18,6 +18,7 @@ import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+import javax.swing.text.JTextComponent;
 import salesinventory.*;
 import staffandEmployeeManagement.*;
 import managedocuments.*;
@@ -25,6 +26,9 @@ import systemsandmanagementrinterface.UsersInformationTransactions;
 
 public class MainPOSInterface extends JFrame {
 
+    private static  Icon passwordStatusLabelIcon;
+    private static JLabel passwordAvailableLabel;
+    private static Boolean imageFileSelected = false;
     private static JMenu reportsMainViewMenu;
     private static JPanel expensesViewMainPanel;
     private static JMenu expensesMenu;
@@ -60,7 +64,7 @@ public class MainPOSInterface extends JFrame {
     private static JLabel itemDiscountLabel;
     private static JButton finalSortButton;
     private static InputVerification verification;
-    private static EmplyeeDataTransaction employeeDataTransactions;
+    private static EmployeeDataTransaction employeeDataTransactions;
     private static JMenu logOutMenu;
     private static JLabel companyFooterLabel;
     private static CompanyInfoTransactions companyInformation;
@@ -568,9 +572,11 @@ public class MainPOSInterface extends JFrame {
         } catch (IOException ex) {
         }
         getConnection();
+        passwordStatusLabelIcon = new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\okAnimated2.PNG");
+        passwordAvailableLabel = new JLabel("");
         reportsMainViewMenu = new JMenu("Reports");
         expensesViewMainPanel = new JPanel(null);
-        employeeDataTransactions = new EmplyeeDataTransaction();
+        employeeDataTransactions = new EmployeeDataTransaction();
         logOutMenu = new JMenu();
         itemDiscountLabel = new JLabel("Discount");
         assignDiscountSpinner = new JSpinner();
@@ -1414,8 +1420,63 @@ public class MainPOSInterface extends JFrame {
         footerTextArea.setText(companyInformation.getCompanyInformation().get("footer"));
         webAddressField.setText(companyInformation.getCompanyInformation().get("webAddress"));
 
+        //Register all textFields for validation
+        //Verify pure text textFields @ Company settings
+        List<JTextComponent> pureTextTextComponents = Arrays.asList(
+                companyField, footerTextArea
+        );
+        validateFields(pureTextTextComponents, InputVerification::verifyTextOnlyFields);
+
+        //Verify Numbers Only Fields @ Company settings
+        List<JTextComponent> numbersOnlyTextFields = Arrays.asList(
+                phoneNumberField
+        );
+        validateFields(numbersOnlyTextFields, InputVerification::verifyNumbersOnlyFields);
+
+        //Verify numbersAndText fields @Company Settings
+        List<JTextComponent> numbersAndTextFields = Arrays.asList(
+                vatField, vatRegNumberField, vatField
+        );
+        validateFields(numbersAndTextFields, InputVerification::verifiyNumbersWithTex);
+
+        //Verify address
+        List<JTextComponent> physicalAddressFields = Arrays.asList(
+                companyAddressArea
+        );
+        validateFields(physicalAddressFields, InputVerification::verifyAddress);
+
+        //vaarify Email
+        List<JTextComponent> emailAddressFields = Arrays.asList(
+                settingsEmailField
+        );
+        validateFields(emailAddressFields, InputVerification::verifyEmails);
+
+        //verify web address
+        List<JTextComponent> webAddressFields = Arrays.asList(
+                webAddressField
+        );
+        validateFields(webAddressFields, InputVerification::verifyWebAddress);
+
+        List<JTextComponent> allFields = Arrays.asList(
+                companyField, footerTextArea, phoneNumberField, vatField, vatRegNumberField, vatField,
+                companyAddressArea, settingsEmailField, webAddressField
+        );
+
         updateSettingButton.addActionListener(e -> {
-            companyInformation.addCompanyInformationToDB(companyField.getText(), companyAddressArea.getText(), phoneNumberField.getText(), settingsEmailField.getText(), webAddressField.getText(), vatField.getText(), vatRegNumberField.getText(), footerTextArea.getText());
+            if (checkIfFieldsAreBlank(allFields) == false
+                    || levelTwoTextFieldsValidation(webAddressFields, InputVerification::verifyWebAddress) == false
+                    || levelTwoTextFieldsValidation(emailAddressFields, InputVerification::verifyEmails) == false
+                    || levelTwoTextFieldsValidation(physicalAddressFields, InputVerification::verifyAddress) == false
+                    || levelTwoTextFieldsValidation(numbersAndTextFields, InputVerification::verifiyNumbersWithTex) == false
+                    || levelTwoTextFieldsValidation(numbersOnlyTextFields, InputVerification::verifyNumbersOnlyFields) == false
+                    || levelTwoTextFieldsValidation(pureTextTextComponents, InputVerification::verifyTextOnlyFields) == false) {
+
+                Toolkit soundToolkit = Toolkit.getDefaultToolkit();
+                soundToolkit.beep();
+                JOptionPane.showMessageDialog(null, "Ensure All Fields are Valid", "", JOptionPane.ERROR_MESSAGE);
+            } else if (checkIfFieldsAreBlank(allFields) == true) {
+                companyInformation.addCompanyInformationToDB(companyField.getText(), companyAddressArea.getText(), phoneNumberField.getText(), settingsEmailField.getText(), webAddressField.getText(), vatField.getText(), vatRegNumberField.getText(), footerTextArea.getText());
+            }
         });
         //---------------------------------------------------------------------------------------------------------------------------------------
         newEmployeeNewEmpfileChooser = new JFileChooser();
@@ -1480,6 +1541,7 @@ public class MainPOSInterface extends JFrame {
         newEmployeepasswordLabel.setBounds(500, 220, 300, 30);
         newEmployeepassword.setBounds(500, 260, 300, 30);
         newEmployeepassword.setBounds(500, 260, 300, 40);
+        passwordAvailableLabel.setBounds(820,260,250,50);
         newEmployeeconfirmPasswordlabel.setBounds(500, 300, 300, 30);
         newEmployeeconfirmPasswordField.setBounds(500, 330, 300, 40);
         newEmployeeupdateUserDetailsButton.setBounds(500, 410, 100, 40);
@@ -1501,11 +1563,13 @@ public class MainPOSInterface extends JFrame {
         newEmployeeeditProfilePanel.add(newEmployeeEmployeeIDoLabel);
         newEmployeeeditProfilePanel.add(newEmployeeemployeeIDField);
         newEmployeeeditProfilePanel.add(newEmployeepasswordLabel);
+        newEmployeeeditProfilePanel.add(passwordAvailableLabel);
         newEmployeeeditProfilePanel.add(newEmployeepassword);
         newEmployeeeditProfilePanel.add(newEmployeeconfirmPasswordlabel);
         newEmployeeeditProfilePanel.add(newEmployeeconfirmPasswordField);
         newEmployeeeditProfilePanel.add(newEmployeeupdateUserDetailsButton);
         newEmployeetopAddUserPanel.setBackground(Color.decode("#1E90FF"));
+        passwordAvailableLabel.setForeground(Color.red);
         addNewEmplyeeViewPanel.add(newEmployeetopAddUserPanel);
         addNewEmplyeeViewPanel.add(newEmployeeeditProfilePanel);
         addFieldsFocusListener(newEmployeefirstNameField);
@@ -1525,68 +1589,155 @@ public class MainPOSInterface extends JFrame {
                 File filee = new File(newEmployeeNewEmpfileChooser.getSelectedFile().getPath());
                 imagee = ImageIO.read(filee);
                 newEmployeeprofileImageLabel.setIcon(new ImageIcon(imagee));
-
+                imageFileSelected = true;
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Unabale to add File...\n" + ex.getMessage());
             } catch (NullPointerException e) {
                 JOptionPane.showMessageDialog(null, "No File Selected...");
             }
         });
+
+        //Verify employee Details form
+        List<JTextComponent> employeeTextOnlyFields = Arrays.asList(
+                newEmployeefirstNameField, newEmployeelastNameField
+        );
+        validateFields(employeeTextOnlyFields, InputVerification::verifyTextOnlyFields);
+        List<JTextComponent> employeeNumbersOnlyFields = Arrays.asList(
+                newEmployeephoneField
+        );
+        validateFields(employeeNumbersOnlyFields, InputVerification::verifyNumbersOnlyFields);
+        List<JTextComponent> employeesEmailFields = Arrays.asList(
+                newEmployeeemailField
+        );
+        validateFields(employeesEmailFields, InputVerification::verifyEmails);
+        List<JTextComponent> employeeFullNamesWithInitials = Arrays.asList(
+                newEmployeeSupervisorField
+        );
+        validateFields(employeeFullNamesWithInitials, InputVerification::verifyNamesWithInitials);
+        List<JTextComponent> numbersWithTextFields = Arrays.asList(
+                newEmployeeemployeeIDField
+        );
+        validateFields(numbersWithTextFields, InputVerification::verifiyNumbersWithTex);
+        List<JTextComponent> allEmployeeTextComponents = Arrays.asList(
+                newEmployeeemployeeIDField, newEmployeeSupervisorField, newEmployeeemailField, newEmployeephoneField,
+                newEmployeefirstNameField, newEmployeelastNameField, newEmployeepassword, newEmployeeconfirmPasswordField
+        );
+
+        //check if password is already in use
+        newEmployeepassword.addKeyListener(
+                new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword())) && !String.valueOf(newEmployeepassword.getPassword()).isEmpty()){
+                    newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
+                    repaint();
+                    passwordAvailableLabel.setIcon( new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\white.PNG"));
+                    passwordAvailableLabel.setText("Password Already In Use");
+                    newEmployeeeditProfilePanel.add(passwordAvailableLabel);
+                    
+                    repaint();
+                }else if(!EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword())) && !String.valueOf(newEmployeepassword.getPassword()).isEmpty()){
+                    newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
+                    repaint();
+                    passwordAvailableLabel.setText("");
+                    passwordAvailableLabel.setIcon(passwordStatusLabelIcon);
+                    newEmployeeeditProfilePanel.add(passwordAvailableLabel);
+                    repaint();
+                }else if(String.valueOf(newEmployeepassword.getPassword()).isEmpty()){
+                    newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
+                    repaint();
+                    passwordAvailableLabel.setText("");
+                    passwordAvailableLabel.setIcon( new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\white.PNG"));
+                }
+            }
+
+        }
+        );
+
         newEmployeeupdateUserDetailsButton.addActionListener(e -> {
-            String enteredPassword = String.valueOf(newEmployeepassword.getPassword());
-            String confirmPassword = String.valueOf(newEmployeeconfirmPasswordField.getPassword());
-            int status = employeeDataTransactions.addNewEmployee(newEmployeeemployeeIDField.getText(), newEmployeefirstNameField.getText(), newEmployeelastNameField.getText(), newEmployeephoneField.getText(), newEmployeeemailField.getText(), newEmployeeSupervisorField.getText(), enteredPassword, newEmployeeNewEmpfileChooser.getSelectedFile().getPath(), confirmPassword);
-            switch (status) {
-                case EmplyeeDataTransaction.EMPLOYEE_ADDITION_SUCCEFULL:
-                    newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeephoneField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeeemailField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
-                    newEmployeepassword.setText("");
-                    newEmployeeconfirmPasswordField.setText("");
-                    List<JTextField> textFieldsList = Arrays.asList(newEmployeeemployeeIDField, newEmployeeSupervisorField, newEmployeeemailField, newEmployeefirstNameField, newEmployeelastNameField, newEmployeephoneField);
-                    makeFieldsBlank(textFieldsList);
-                    break;
-                case EmplyeeDataTransaction.ID_DUPLICATION:
-                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeeemployeeIDField.setForeground(Color.red);
-                    makeFieldForegroundBlack(newEmployeeemployeeIDField);
-                    break;
-                case EmplyeeDataTransaction.PASSWORD_DUPLICATION:
-                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeepassword.setText("");
-                    newEmployeeconfirmPasswordField.setText("");
-                    makeFieldForegroundBlack(newEmployeepassword);
-                    break;
-                case EmplyeeDataTransaction.PASSWORD_CONFIRMATION_FAILED:
-                    newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeepassword.setText("");
-                    newEmployeeconfirmPasswordField.setText("");
-                    makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
-                    break;
-                case EmplyeeDataTransaction.EMPLYEE_ADDITION_FAILED:
-                    newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeephoneField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeeemailField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                    makeFieldForegroundBlack(newEmployeefirstNameField);
-                    makeFieldForegroundBlack(newEmployeelastNameField);
-                    makeFieldForegroundBlack(newEmployeephoneField);
-                    makeFieldForegroundBlack(newEmployeeemailField);
-                    makeFieldForegroundBlack(newEmployeeSupervisorField);
-                    makeFieldForegroundBlack(newEmployeeemployeeIDField);
-                    makeFieldForegroundBlack(newEmployeepassword);
-                    makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
-                    break;
-                default:
-                    break;
+
+            //Extra code for image file absent notification
+            if (imageFileSelected == false) {
+                JOptionPane.showMessageDialog(null, "No imageFile Found !");
+            } else {
+
+            }
+
+            if (checkIfFieldsAreBlank(allEmployeeTextComponents) == false
+                    || levelTwoTextFieldsValidation(numbersWithTextFields, InputVerification::verifiyNumbersWithTex) == false
+                    || levelTwoTextFieldsValidation(employeeFullNamesWithInitials, InputVerification::verifyNamesWithInitials) == false
+                    || levelTwoTextFieldsValidation(employeeNumbersOnlyFields, InputVerification::verifyNumbersOnlyFields) == false
+                    || levelTwoTextFieldsValidation(employeeTextOnlyFields, InputVerification::verifyTextOnlyFields) == false
+                    || imageFileSelected == false) {
+
+                Toolkit soundToolkit = Toolkit.getDefaultToolkit();
+                soundToolkit.beep();
+                JOptionPane.showMessageDialog(null, "Ensure All Fields Are Valid !", "Alpha Pharmacy POS", JOptionPane.ERROR_MESSAGE);
+
+            } else if (checkIfFieldsAreBlank(allEmployeeTextComponents) == true) {
+                String enteredPassword = String.valueOf(newEmployeepassword.getPassword());
+                String confirmPassword = String.valueOf(newEmployeeconfirmPasswordField.getPassword());
+                int status = employeeDataTransactions.addNewEmployee(newEmployeeemployeeIDField.getText(), newEmployeefirstNameField.getText(), newEmployeelastNameField.getText(), newEmployeephoneField.getText(), newEmployeeemailField.getText(), newEmployeeSupervisorField.getText(), enteredPassword, newEmployeeNewEmpfileChooser.getSelectedFile().getPath(), confirmPassword);
+                switch (status) {
+                    case EmployeeDataTransaction.EMPLOYEE_ADDITION_SUCCEFULL:
+                        newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeephoneField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeeemailField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeepassword.setBorder(new LineBorder(Color.decode("#1E90FF"), 3));
+                        newEmployeepassword.setText("");
+                        newEmployeeconfirmPasswordField.setText("");
+                        List<JTextComponent> textFieldsList = Arrays.asList(newEmployeeemployeeIDField, newEmployeeSupervisorField, newEmployeeemailField, newEmployeefirstNameField, newEmployeelastNameField, newEmployeephoneField);
+                        makeFieldsBlank(textFieldsList);
+                        break;
+                    case EmployeeDataTransaction.ID_DUPLICATION:
+                        newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeeemployeeIDField.setForeground(Color.red);
+                        makeFieldForegroundBlack(newEmployeeemployeeIDField);
+                        break;
+                    case EmployeeDataTransaction.PASSWORD_DUPLICATION:
+                        newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeepassword.setText("");
+                        newEmployeeconfirmPasswordField.setText("");
+                        makeFieldForegroundBlack(newEmployeepassword);
+                        break;
+                    case EmployeeDataTransaction.PASSWORD_CONFIRMATION_FAILED:
+                        newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeepassword.setText("");
+                        newEmployeeconfirmPasswordField.setText("");
+                        makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
+                        break;
+                    case EmployeeDataTransaction.EMPLYEE_ADDITION_FAILED:
+                        newEmployeefirstNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeelastNameField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeephoneField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeeemailField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeeSupervisorField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeeemployeeIDField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeepassword.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        newEmployeeconfirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                        makeFieldForegroundBlack(newEmployeefirstNameField);
+                        makeFieldForegroundBlack(newEmployeelastNameField);
+                        makeFieldForegroundBlack(newEmployeephoneField);
+                        makeFieldForegroundBlack(newEmployeeemailField);
+                        makeFieldForegroundBlack(newEmployeeSupervisorField);
+                        makeFieldForegroundBlack(newEmployeeemployeeIDField);
+                        makeFieldForegroundBlack(newEmployeepassword);
+                        makeFieldForegroundBlack(newEmployeeconfirmPasswordField);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -1679,30 +1830,66 @@ public class MainPOSInterface extends JFrame {
         addFieldsFocusListener(usersAccessLevelCombo);
         addFieldsFocusListener(userPasswordField);
         addFieldsFocusListener(confirmPasswordField);
+        //Verify and validate fields for users registration
+        List<JTextComponent> textOnlyComponents = Arrays.asList(
+                firstNameField, lastNameField
+        );
+        validateFields(textOnlyComponents, InputVerification::verifyTextOnlyFields);
+        List<JTextComponent> numbersOnlyTextComponents = Arrays.asList(
+                phoneField
+        );
+        validateFields(numbersOnlyTextComponents, InputVerification::verifyNumbersOnlyFields);
+        List<JTextComponent> emailTextComponents = Arrays.asList(
+                emailField
+        );
+        validateFields(emailTextComponents, InputVerification::verifyEmails);
+        List<JTextComponent> fullNamesWithInitials = Arrays.asList(
+                supervisorField
+        );
+        validateFields(fullNamesWithInitials, InputVerification::verifyNamesWithInitials);
+        List<JTextComponent> allUserDataFormFields = Arrays.asList(
+                supervisorField, emailField, phoneField, firstNameField, lastNameField, userPasswordField,
+                confirmPasswordField
+        );
 
         updateUserDetailsButton.addActionListener(event -> {
-            if ((String.valueOf(userPasswordField.getPassword())).equals(String.valueOf(confirmPasswordField.getPassword()))) {
-                String userPass = String.valueOf(userPasswordField);
-                int insert_status = UsersInformationTransactions.addUserInformationToDB("232", firstNameField.getText(), lastNameField.getText(), phoneField.getText(), emailField.getText(), supervisorField.getText(), usersAccessLevelCombo.getSelectedItem().toString(), userPass);
-                switch (insert_status) {
-                    case UsersInformationTransactions.PASSWORD_NOT_AVAILBLE:
-                        userPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                        confirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                        JOptionPane.showMessageDialog(null, "Password Not Available!");
-                        break;
-                    case UsersInformationTransactions.PASSWORD_AVAILABLE:
-                        //insert user info to db
-                        break;
-                    default:
-                        JOptionPane.showMessageDialog(null, "Unknown Error.\nConsult Root");
-                        break;
+
+            if (checkIfFieldsAreBlank(allFields) == false || levelTwoTextFieldsValidation(fullNamesWithInitials, InputVerification::verifyNamesWithInitials) == false
+                    || levelTwoTextFieldsValidation(emailTextComponents, InputVerification::verifyEmails) == false
+                    || levelTwoTextFieldsValidation(numbersOnlyTextComponents, InputVerification::verifyNumbersOnlyFields) == false
+                    || levelTwoTextFieldsValidation(textOnlyComponents, InputVerification::verifyTextOnlyFields) == false) {
+
+                JOptionPane.showMessageDialog(null, "Ensure All Fields Are Valid", "Alpha Pharmacy POS", JOptionPane.ERROR_MESSAGE);
+
+            } else if (checkIfFieldsAreBlank(allFields) == true) {
+
+                //Confirm password
+                if ((String.valueOf(userPasswordField.getPassword())).equals(String.valueOf(confirmPasswordField.getPassword()))) {
+                    String userPass = String.valueOf(userPasswordField);
+                    int insert_status = UsersInformationTransactions.addUserInformationToDB("232", firstNameField.getText(), lastNameField.getText(), phoneField.getText(), emailField.getText(), supervisorField.getText(), usersAccessLevelCombo.getSelectedItem().toString(), userPass);
+                    switch (insert_status) {
+                        case UsersInformationTransactions.PASSWORD_NOT_AVAILBLE:
+                            userPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                            confirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                            JOptionPane.showMessageDialog(null, "Password Not Available!");
+                            break;
+                        case UsersInformationTransactions.PASSWORD_AVAILABLE:
+                            //insert user info to db
+                            //Clear all fields for next input
+                            makeFieldsBlank(allUserDataFormFields);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Unknown Error.\nConsult Root");
+                            break;
+                    }
+                } else if (!(String.valueOf(userPasswordField.getPassword())).equals(String.valueOf(confirmPasswordField.getPassword()))) {
+                    confirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
+                    JOptionPane.showMessageDialog(null, "Passwords do not match", "", JOptionPane.ERROR_MESSAGE);
+                    confirmPasswordField.setText("");
+                    userPasswordField.setText("");
                 }
-            } else if (!(String.valueOf(userPasswordField.getPassword())).equals(String.valueOf(confirmPasswordField.getPassword()))) {
-                confirmPasswordField.setBorder(new LineBorder(Color.decode("#DC143C"), 3));
-                JOptionPane.showMessageDialog(null, "Passwords do not match", "", JOptionPane.ERROR_MESSAGE);
-                confirmPasswordField.setText("");
-                userPasswordField.setText("");
             }
+
         });
         //--------------------------------------------------------------------------------------------------------------------------------------
         UserstopPanel = new JPanel(null);
@@ -3087,12 +3274,6 @@ public class MainPOSInterface extends JFrame {
             statementLineOneLabel.setText("Total: " + invoiceTableModel.getRowCount() + "  Records  Found");
 
         });
-        //Register all textFields for validation
-        List<JTextField> validationJTextFields = Arrays.asList(
-                companyField, patientsFirstNameField, patientsLastNameField, supervisorField, newEmployeefirstNameField,
-                newEmployeelastNameField, firstNameField, lastNameField, titleField
-        );
-        validateFields(validationJTextFields, InputVerification::verifyUserTextOnlyFields);
 
         getContentPane().add(splitPane);
         setJMenuBar(menuBar);
@@ -3136,7 +3317,7 @@ public class MainPOSInterface extends JFrame {
             @Override
             public void mouseEntered(MouseEvent event) {
                 //do nothing
-              
+
             }
 
             @Override
@@ -3152,7 +3333,7 @@ public class MainPOSInterface extends JFrame {
         //Verify entered text when field looses focus
         if (componentObject instanceof JTextField) {
             String text = ((JTextField) componentObject).getText();
-            if (!InputVerification.verifyUserTextOnlyFields(text)) {
+            if (!InputVerification.verifyTextOnlyFields(text)) {
                 componentObject.setBorder(new LineBorder(Color.red));
             } else {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
@@ -3531,7 +3712,7 @@ public class MainPOSInterface extends JFrame {
         });
     }
 
-    public void makeFieldsBlank(List<JTextField> textFields) {
+    public void makeFieldsBlank(List<JTextComponent> textFields) {
         textFields.stream()
                 .forEach(e -> e.setText(""));
     }
@@ -3617,7 +3798,7 @@ public class MainPOSInterface extends JFrame {
     }
 
     //add Fileds Focus Listeners
-    public void addFieldsFocusListener(final JComponent componentObject) {
+    public final void addFieldsFocusListener(final JComponent componentObject) {
         componentObject.addFocusListener(
                 new FocusAdapter() {
             @Override
@@ -3665,11 +3846,11 @@ public class MainPOSInterface extends JFrame {
         );
     }
 
-    public void validateFields(List<JTextField> textFields, Predicate predicate) {
+    public final <T extends JTextComponent> void validateFields(List<T> textComponent, Predicate predicate) {
 
-        List<JTextField> invalidTextFields = new ArrayList<>();
+        List<T> invalidTextFields = new ArrayList<>();
 
-        textFields.forEach(e -> {
+        textComponent.forEach(e -> {
             e.addKeyListener(
                     new KeyListener() {
                 @Override
@@ -3683,9 +3864,8 @@ public class MainPOSInterface extends JFrame {
                 @Override
                 public void keyReleased(KeyEvent e) {
 
-                    for (JTextField s : textFields) {
+                    textComponent.stream().forEach((s) -> {
                         if (!predicate.test(s.getText())) {
-                            invalidTextFields.add(s);
                             s.setBorder(new LineBorder(Color.red));
                             s.addFocusListener(
                                     new FocusListener() {
@@ -3719,13 +3899,50 @@ public class MainPOSInterface extends JFrame {
                             }
                             );
                         }
-                    }
+                    });
 
                 }
 
             }
             );
         });
+
+    }
+
+    public final Boolean checkIfFieldsAreBlank(List<JTextComponent> allFields) {
+
+        Boolean allCheckedOut = false;
+        List<JTextComponent> blankFields = allFields.stream()
+                .filter(e -> e.getText().isEmpty() || e.getText().startsWith(" "))
+                .collect(toList());
+        if (blankFields.isEmpty()) {
+            System.err.println("no blanks");
+            allCheckedOut = true;
+        } else if (!blankFields.isEmpty()) {
+            blankFields.forEach(e -> e.setBorder(new LineBorder(Color.red)));
+            System.err.println("Blanks");
+            allCheckedOut = false;
+        }
+
+        return allCheckedOut;
+    }
+
+    public final Boolean levelTwoTextFieldsValidation(List<JTextComponent> textFields, Predicate predicate) {
+        Boolean isAllFieldsValid = false;
+        List<JTextComponent> invalidFields
+                = textFields.stream()
+                .filter(e -> !predicate.test(e.getText()))
+                .collect(toList());
+
+        if (invalidFields.isEmpty()) {
+            isAllFieldsValid = true;
+        } else if (!invalidFields.isEmpty()) {
+            isAllFieldsValid = false;
+            invalidFields.stream()
+                    .forEach(e -> e.setBorder(new LineBorder(Color.red)));
+        }
+
+        return isAllFieldsValid;
 
     }
 
