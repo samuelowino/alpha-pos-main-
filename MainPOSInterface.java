@@ -958,7 +958,6 @@ public class MainPOSInterface extends JFrame {
         customerPatientsSearchField = new JTextField("Search...");
         customerPatientSortMethodCombo = new JComboBox<>(patientCustomerInformationSortOptions);
         customerPatientTable = new JTable(customerModel);
-        customerPatientTable.setEnabled(false);
         List<String> customerTableColumnHeaders = Arrays.asList("First Name", "Last Name", "Phone", "Email", "Prescription", "Last Visit", "Next Appointment", "Diagnosis");
         setTableColumnHeaders(customerTableColumnHeaders, customerModel);
         connectToDatabase();
