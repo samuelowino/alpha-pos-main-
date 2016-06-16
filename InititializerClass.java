@@ -20,6 +20,5 @@ public class InititializerClass {
                 JOptionPane.showMessageDialog(null,"Connot Connect to Alpha Restaurant POS.sql...");
             }
         }
-        
     }
 }

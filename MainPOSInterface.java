@@ -532,7 +532,7 @@ public class MainPOSInterface extends JFrame {
     private static Image applicationIconImage;
 
     public MainPOSInterface(Boolean visible) {
-        super("Alpha Pharmacy POS");
+        super("Alpha Pharmacy POS     Version 1.2 Build ID:201510222201");
         setSize(getMaximumSize().width, getMaximumSize().height);
         setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1703,15 +1703,7 @@ public class MainPOSInterface extends JFrame {
 
         //check if password is already in use
         newEmployeepassword.addKeyListener(
-                new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
+                new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword()))) {
@@ -2775,22 +2767,7 @@ public class MainPOSInterface extends JFrame {
         menuBar.setBorder(new LineBorder(Color.WHITE, 5));
         //CREATE MOUSE LISTNERS FOR THE MENUBAR 
         menuBar.addMouseListener(
-                new MouseListener() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                //DON NOTHING 
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                //DON NOTHING 
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent event) {
-                //DON NOTHING
-            }
-
+                new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent event) {
 
@@ -3281,7 +3258,7 @@ public class MainPOSInterface extends JFrame {
     public final void onClickBlueBorder(final JComponent componentObject) {
         //Mouse Listener
         componentObject.addMouseListener(
-                new MouseListener() {
+                new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
@@ -3295,17 +3272,6 @@ public class MainPOSInterface extends JFrame {
             @Override
             public void mousePressed(MouseEvent event) {
                 componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent event) {
-                //do nothing
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent event) {
-                //do nothing
             }
         }
         );
@@ -3356,7 +3322,7 @@ public class MainPOSInterface extends JFrame {
     //Search TextField mouseListener
     public final void searchTextFieldMouseListener(final JTextField textFieldObject) {
         textFieldObject.addMouseListener(
-                new MouseListener() {
+                new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
                 if (textFieldObject.getText().equals("Search...")) {
@@ -3388,11 +3354,6 @@ public class MainPOSInterface extends JFrame {
                     textFieldObject.setText("");
                     textFieldObject.setForeground(Color.BLUE);
                 }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent event) {
-
             }
         }
         );
@@ -3514,24 +3475,7 @@ public class MainPOSInterface extends JFrame {
      */
     public final void changeCursorTypesForMenues(final JMenu menueObject) {
         menueObject.addMouseListener(
-                new MouseListener() {
-            @Override
-            public void mousePressed(MouseEvent event) {
-                //setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                //DON NOTHING 
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                //DON NOTHING 
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent event) {
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-                //DON NOTHING
-            }
-
+                new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent event) {
 
@@ -3660,7 +3604,7 @@ public class MainPOSInterface extends JFrame {
 
     public final void addTextAreaKeyListenerEvents(JTextArea textArea) {
         textArea.addKeyListener(
-                new KeyListener() {
+                new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 textArea.setForeground(Color.decode("#1E90FF"));
@@ -3669,11 +3613,6 @@ public class MainPOSInterface extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 textArea.setForeground(Color.decode("#1E90FF"));
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                //textArea.setForeground(Color.decode("#1E90FF"));
             }
         }
         );
@@ -3767,7 +3706,6 @@ public class MainPOSInterface extends JFrame {
             public void focusGained(FocusEvent event) {
                 componentObject.setBorder(new LineBorder(Color.BLUE, 2));
             }
-
             @Override
             public void focusLost(FocusEvent event) {
                 componentObject.setBorder(new LineBorder(Color.black, 1));
@@ -3814,15 +3752,7 @@ public class MainPOSInterface extends JFrame {
 
         textComponent.forEach(e -> {
             e.addKeyListener(
-                    new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                }
-
+                    new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
 
@@ -3835,7 +3765,6 @@ public class MainPOSInterface extends JFrame {
                                 public void focusGained(FocusEvent e) {
                                     s.setBorder(new LineBorder(Color.red));
                                 }
-
                                 @Override
                                 public void focusLost(FocusEvent e) {
                                     s.setBorder(new LineBorder(Color.red));
@@ -3852,7 +3781,6 @@ public class MainPOSInterface extends JFrame {
                                 public void focusGained(FocusEvent e) {
                                     s.setBorder(new LineBorder(Color.decode("#1E90FF")));
                                 }
-
                                 @Override
                                 public void focusLost(FocusEvent e) {
                                     s.setBorder(new LineBorder(Color.decode("#1E90FF")));
