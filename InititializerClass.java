@@ -14,7 +14,7 @@ public class InititializerClass {
     
     public static void main(String[] args) {
         if(DrugInventoryTransactions.getApplicationContext() == 0){
-            MainPOSInterface mainPOSInterface = new MainPOSInterface(true);
+            LogInScreen mainPOSInterface = new LogInScreen(true);
         }else if(DrugInventoryTransactions.getApplicationContext() == 1){
             while(true){
                 JOptionPane.showMessageDialog(null,"Connot Connect to Alpha Restaurant POS.sql...");

@@ -1,5 +1,6 @@
 package alpha;
 
+import SystemSecurity.MD5Encryption;
 import com.toedter.calendar.JDateChooser;
 import customerTracking.*;
 import java.awt.*;
@@ -26,6 +27,9 @@ import systemsandmanagementrinterface.UsersInformationTransactions;
 
 public class MainPOSInterface extends JFrame {
 
+    protected static JLabel backgroundImageLabel;
+    private static JComboBox<String> ascdescExpensesComboBox;
+    private static JMenuItem viewCustomerDetailsMenuItem;
     private static JMenuItem supplyTransactionsMenuItems;
     private static JComboBox<String> customersAscDescCombo;
     private static JComboBox suppliersViewDescAscCombo;
@@ -74,11 +78,11 @@ public class MainPOSInterface extends JFrame {
     private static JLabel companyFooterLabel;
     private static CompanyInfoTransactions companyInformation;
     private static CustomerTransaction customerTransactions;
-    private static DrugInventoryTransactions drugInventoryTransactions;
+    protected static DrugInventoryTransactions drugInventoryTransactions;
     private static JButton generateSaleReportsByDateButton;
     private static JLabel drugInventoryLabel;
     private static JMenu suppliersMenu;
-    private static DefaultTableModel suppliersModel;
+    protected static DefaultTableModel suppliersModel;
     private static JLabel suppliersInformationLabel;
     public static JPanel suppliersPatientsTopPanel;
     public static JPanel suppliersTableComponentsPanel;
@@ -91,13 +95,13 @@ public class MainPOSInterface extends JFrame {
     private static JComboBox<String> suppliersPatientSortMethodCombo;
     private static JTable suppliersPatientTable;
     private static JScrollPane suppliersPatientTableScrollPane;
-    private static JLabel suppliersPatientTotalLabel;
+    protected static JLabel suppliersPatientTotalLabel;
 
-    private static JPanel suppliersInfoViewPanel;
+    protected static JPanel suppliersInfoViewPanel;
     //------------------------------------------------------------------------------------------------------------------
     private static DefaultTableModel customerModel;
-    private static DefaultTableModel invoiceTableModel;
-    private static DefaultTableModel stockTabelModel;
+    protected static DefaultTableModel invoiceTableModel;
+    protected static DefaultTableModel stockTabelModel;
     private static JMenu salesReportsMenu;
     private static JMenu salesMenu;
     private static JMenu stockMenu;
@@ -108,7 +112,7 @@ public class MainPOSInterface extends JFrame {
     private static JPanel processPayMentsViewPanel;
     //--------------------------------------------------------------------------------------------------------------------------
     private static JButton addItemToSalesButton;
-    private static JPanel addNewPatientCustomerViewPanel;
+    public static JPanel addNewPatientCustomerViewPanel;
     private static JButton patientsAddPrescriptionDetailsButton;
     private static JPanel patientsTopAddUserPanel;
     private static JPanel patientsEditProfilePanel;
@@ -133,7 +137,7 @@ public class MainPOSInterface extends JFrame {
     private static JTextArea patientsPatientsDiagnosisField;
     private static JButton patientsUpdateUserDetailsButton;
     //------------------------------------------------------------------------------------------------------------
-    private static JPanel viewCustomerInformationDetailsView;
+    public static JPanel viewCustomerInformationDetailsView;
     private static JLabel customerInformationLabel;
     public static JPanel customersPatientsTopPanel;
     public static JPanel customerPatientTableComponentsPanel;
@@ -217,7 +221,7 @@ public class MainPOSInterface extends JFrame {
     private static JFileChooser newEmployeeNewEmpfileChooser;
 
     //------------------------------------------------------------------------------------------------------------
-    private static JPanel inventoryViewPanel;
+    protected static JPanel inventoryViewPanel;
     private static JPanel inventroyViewTopPanel;
     private static JPanel inventoryViewTableComponentsPanel;
     private static JPanel inventoryViewTableOnlypanel;
@@ -263,23 +267,6 @@ public class MainPOSInterface extends JFrame {
     //--------------------------------------------------------------------------------------------------------------------------------------------------------
     private static JPanel customersViewPanel;
     private static JPanel shiftsViewPanel;
-    private static JButton sortAllShiftsButton;
-
-    //------------------------------------------------------------------------------------------------------------------------------------------------------
-    private static JPanel customerTopPanel;
-    private static JPanel customersLabelPanel;
-    private static JPanel cutomersTablePanel;
-    private static JButton addCustomersButton;
-    private static JButton printCustomerInfoButton;
-    private static JLabel customersLabel;
-    private static JLabel customersIconLabel;
-    private static JLabel numberOfCustomerRecordsLabel;
-    private static JButton filterCustomersButton;
-    private static JTextField searchCustomersField;
-    private static JButton sortCustomersByButton;
-    private static JComboBox<String> sorCustomestByCombo;
-    private static JTable customersTabelCustome;
-    private static JScrollPane CustomeTableScrollPane;
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
     private static JPanel addNewUserPanelView;
     private static JPanel topAddUserPanel;
@@ -365,7 +352,7 @@ public class MainPOSInterface extends JFrame {
     private static ClockInClockOutTransactions DAO;
 
     //-------------------------------------------------------------------------------------------------------------------------------------------
-    private static JPanel inveicePanel;
+    protected static JPanel inveicePanel;
 
     //------------------------------------------------------------------------------------------------------------------------------------------
     private static JPanel topInvoicePanel;
@@ -380,19 +367,18 @@ public class MainPOSInterface extends JFrame {
     private static JDateChooser startDateField;
     private static JDateChooser endDateField;
     private static JTable inventoryTable;
-    private static JLabel statementLineOneLabel;
-    private static JLabel statementLineTwoLabel;
-    private static JLabel statementLineThreeLabel;
-    private static JLabel statementLineFourLabel;
-    private static JLabel statementLineFiveLabel;
-    private static JLabel statementLineSixLabel;
-    private static JLabel statementLineSevenLabel;
-    private static JLabel statementLineEightLabel;
-    private static JLabel statementLineNineLabel;
-    private static JLabel statementLineTenLabel;
+    protected static JLabel statementLineOneLabel;
+    protected static JLabel statementLineTwoLabel;
+    protected static JLabel statementLineThreeLabel;
+    protected static JLabel statementLineFourLabel;
+    protected static JLabel statementLineFiveLabel;
+    protected static JLabel statementLineSixLabel;
+    protected static JLabel statementLineSevenLabel;
+    protected static JLabel statementLineEightLabel;
+    protected static JLabel statementLineNineLabel;
+    protected static JLabel statementLineTenLabel;
 
     //--------------------------------------------------------------------------------------------------------------------------------------------
-    private static EditItemsDetailsFrame editScreen;
     public static JPanel topPanel;
     public static JPanel tableComponentsPanel;
     public static JPanel tableOnlypanel;
@@ -435,9 +421,7 @@ public class MainPOSInterface extends JFrame {
     private static JLabel VATLabel;
     private static JLabel totalAmountToBePaidLabel;
     private static JLabel totalItemsNoLabel;
-    // private static JMenuBar menuBar;
     private static JMenu salesRegister;
-    //private static JMenu itemsMenu;
     private static JLabel searchByCategoryLabel;
     private static JMenu customers;
     private static JMenu PointofSaleLabel;
@@ -449,10 +433,8 @@ public class MainPOSInterface extends JFrame {
     //SplitPane
     public static JSplitPane splitPane;
     //PopUPMenu
-    private static JPopupMenu popUpmenu;
     private static JMenuBar menuBar;
     //Menues
-    private static JMenu personalisationMenu;
     private static JMenu fileMenu;
     private static JMenu displaySettingsMenu;
     private static JMenu editMenu;
@@ -460,8 +442,6 @@ public class MainPOSInterface extends JFrame {
     private static JMenu purchasingMenu;
     private static JMenu configurationMenu;
     private static JMenu helpMenu;
-    private static JMenu salesRegisterMenu;
-    private static JMenu usersMenu;
     private static JMenu itemsMenu;
     private static JMenu customersMenu;
     //menuItems --> FileMenue
@@ -490,20 +470,6 @@ public class MainPOSInterface extends JFrame {
     private static JMenuItem printNotificationMenuItem;
     private static JMenuItem exitMenuItem;
     private static JMenuItem clockInClockOutMenuItem;
-    //menuItems --> viewmenu
-    private static JMenuItem taskListViewMenuItem;
-    private static JMenuItem clientsMenuItem;
-    private static JMenuItem shiftMenuItem;
-    private static JMenu toolBarsMenuItem;
-    private static JMenuItem standardSubMenItem;
-    private static JMenuItem hearderSubMenuItem;
-    private static JMenu themeMenuItem;
-    private static JMenuItem abcreThemeMenuItem;
-    private static JMenuItem abcre2ThemeMenuItem;
-    private static JMenuItem aquaMenuItem;
-    private static JMenuItem barcieMenuItem;
-    private static JMenuItem classsicThemeMenuItem;
-    private static JMenuItem silverManueItem;
     //menuItems --> configurationMenu
     //menuItems --> HelpMenu
     private static JMenuItem contentsMenuItem;
@@ -533,17 +499,21 @@ public class MainPOSInterface extends JFrame {
 
     public MainPOSInterface(Boolean visible) {
         super("Alpha Pharmacy POS     Version 1.2 Build ID:201510222201");
-        setSize(getMaximumSize().width, getMaximumSize().height);
-        setLocation(0, 0);
+        setSize(1400,800);
+        setLocation(0,0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
         setResizable(false);
         try {
-            applicationIconImage = ImageIO.read(new File("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\pos icon.JPG"));
+            applicationIconImage = ImageIO.read(new File("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\Evermor-Design-Galaxian-Pill.ico"));
             setIconImage(applicationIconImage);
         } catch (IOException ex) {
         }
+        backgroundImageLabel = new JLabel(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\nature-grass-green-tree-tree-leaves-leaves-autumn-path-house-house-foliage-sun-rays-blur-background-nature-tree-wallpaper-widescreen-full-screen-widescreen-hd-wallpapers-background-wallpaper.jpg"));
+        backgroundImageLabel.setBounds(0, 0, 1400, 800);
         String[] customersAcsDesc = {"DESC", "ASC"};
+        ascdescExpensesComboBox = new JComboBox<String>(customersAcsDesc);
+        viewCustomerDetailsMenuItem = new JMenuItem("View Customer Details");
         customersAscDescCombo = new JComboBox<String>(customersAcsDesc);
         getConnection();
         String[] descAsc = {"DESC", "ASC"};
@@ -553,7 +523,7 @@ public class MainPOSInterface extends JFrame {
         addNewDrugItemCategoryMenu = new JMenuItem("Add New Category");
         passwordStatusLabelIcon = new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\okAnimated2.PNG");
         passwordAvailableLabel = new JLabel("");
-        reportsMainViewMenu = new JMenu("Reports");
+        reportsMainViewMenu = new JMenu("DashBoard");
         expensesViewMainPanel = new JPanel(null);
         employeeDataTransactions = new EmployeeDataTransaction();
         logOutMenu = new JMenu();
@@ -668,25 +638,25 @@ public class MainPOSInterface extends JFrame {
 
         suppliersPatiientsSearchField.addKeyListener(
                 new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent event) {
-                suppliersSearchText = suppliersPatiientsSearchField.getText();
+                    @Override
+                    public void keyTyped(KeyEvent event) {
+                        suppliersSearchText = suppliersPatiientsSearchField.getText();
 
-            }
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent event) {
-                retrieveDataBySearch("SELECT * FROM suppliers WHERE suppliers_name LIKE '%" + suppliersSearchText
-                        + "%' OR contact_Person LIKE '%" + suppliersSearchText + "%' OR Region LIKE '%"
-                        + suppliersSearchText + "%' OR email LIKE '%" + suppliersSearchText + "%' OR Contact LIKE '%" + suppliersSearchText + "%';", suppliersModel, "");
-                suppliersPatientTotalLabel.setText("Total:" + suppliersModel.getRowCount() + "  Records Found");
-            }
+                    @Override
+                    public void keyReleased(KeyEvent event) {
+                        retrieveDataBySearch("SELECT * FROM suppliers WHERE suppliers_name LIKE '%" + suppliersSearchText
+                                + "%' OR contact_Person LIKE '%" + suppliersSearchText + "%' OR Region LIKE '%"
+                                + suppliersSearchText + "%' OR email LIKE '%" + suppliersSearchText + "%' OR Contact LIKE '%" + suppliersSearchText + "%';", suppliersModel, "");
+                        suppliersPatientTotalLabel.setText("Total:" + suppliersModel.getRowCount() + "  Records Found");
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent event) {
-                suppliersSearchText = suppliersPatiientsSearchField.getText();
-            }
-        });
+                    @Override
+                    public void keyPressed(KeyEvent event) {
+                        suppliersSearchText = suppliersPatiientsSearchField.getText();
+                    }
+                });
         suppliersPatientSortMethodCombo.addActionListener(e -> {
             retrievedNaturalySortedTableData(suppliersPatientSortMethodCombo.getSelectedItem().toString(), suppliersViewDescAscCombo.getSelectedItem().toString(), suppliersModel, "Suppliers Table", "Suppliers");
             suppliersPatientTotalLabel.setText("Total:" + suppliersModel.getRowCount() + "  Records Found");
@@ -735,6 +705,9 @@ public class MainPOSInterface extends JFrame {
         searchExpensesField.setBounds(55, 5, 300, 30);
         sortExpensesByButton.setBounds(365, 5, 100, 30);
         sortExpensesMethodCombo.setBounds(475, 5, 200, 30);
+        sortExpensesMethodCombo.setBackground(Color.WHITE);
+        ascdescExpensesComboBox.setBounds(685, 5, 200, 30);
+        ascdescExpensesComboBox.setBackground(Color.WHITE);
         expenseTableScrollPane.setBounds(5, 25, 990, 415);
         expensesTopPanel = new JPanel(null);
         expensesTableComponentsPanel = new JPanel(null);
@@ -759,12 +732,16 @@ public class MainPOSInterface extends JFrame {
         expensesTableComponentsPanel.add(searchExpensesField);
         expensesTableComponentsPanel.add(sortExpensesByButton);
         expensesTableComponentsPanel.add(sortExpensesMethodCombo);
+        expensesTableComponentsPanel.add(ascdescExpensesComboBox);
         expensesTableOnlypanel.add(expenseTotalLabel);
         expensesTableOnlypanel.add(expenseTableScrollPane);
 
         expensesTopLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
         expensesTopLabel.setForeground(Color.WHITE);
         expensesTopLabel.setBounds(15, 10, 200, 40);
+        addNewExpenseButton.setForeground(Color.WHITE);
+        printExpensesButton.setForeground(Color.WHITE);
+        sortExpensesByButton.setForeground(Color.WHITE);
 
         addFieldsFocusListener(sortExpensesMethodCombo);
         addFieldsFocusListener(searchExpensesField);
@@ -783,25 +760,31 @@ public class MainPOSInterface extends JFrame {
         });
         searchExpensesField.addKeyListener(
                 new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                expenseSearchText = searchExpensesField.getText();
-            }
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        expenseSearchText = searchExpensesField.getText();
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                expenseSearchText = searchExpensesField.getText();
-            }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        expenseSearchText = searchExpensesField.getText();
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                retrieveDataBySearch("SELECT * FROM companyExpenses WHERE expID LIKE '%" + expenseSearchText + "%' OR Title LIKE '%" + expenseSearchText + "%' OR cost LIKE '%" + expenseSearchText + "%';", expensesTableModel, "Expenses");
-            }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        retrieveDataBySearch("SELECT * FROM companyExpenses WHERE expID LIKE '%" + expenseSearchText + "%' OR Title LIKE '%" + expenseSearchText + "%' OR cost LIKE '%" + expenseSearchText + "%';", expensesTableModel, "Expenses");
+                        expenseTotalLabel.setText("Total:" + expensesTableModel.getRowCount() + "  Records Found");
+                    }
 
-        }
+                }
         );
         sortExpensesMethodCombo.addActionListener(e -> {
-            retrievedNaturalySortedTableData(sortExpensesMethodCombo.getSelectedItem().toString(), "DESC", expensesTableModel, "Expenses Table", "CompanyExpenses");
+            retrievedNaturalySortedTableData(sortExpensesMethodCombo.getSelectedItem().toString(), ascdescExpensesComboBox.getSelectedItem().toString(), expensesTableModel, "Expenses Table", "CompanyExpenses");
+            expenseTotalLabel.setText("Total:" + expensesTableModel.getRowCount() + "  Records Found");
+            repaint();
+        });
+        ascdescExpensesComboBox.addActionListener(e -> {
+            retrievedNaturalySortedTableData(sortExpensesMethodCombo.getSelectedItem().toString(), ascdescExpensesComboBox.getSelectedItem().toString(), expensesTableModel, "Expenses Table", "CompanyExpenses");
             expenseTotalLabel.setText("Total:" + expensesTableModel.getRowCount() + "  Records Found");
             repaint();
         });
@@ -813,7 +796,7 @@ public class MainPOSInterface extends JFrame {
         patientsAddPrescriptionDetailsButton = new JButton("Add Drugs/Prescription");
         patientsUpdateInfoButton = new JButton("Update Info");
         patientsUpdateUserDetailsButton = new JButton("Update");
-        patientsAdminButton = new JButton("Admin");
+        patientsAdminButton = new JButton("Back");
         patientsCustomerInformationLabel = new JLabel("Customer Information");
         patientsFirstNameLabel = new JLabel("First Name");
         patientsFirstNameField = new JTextField();
@@ -945,7 +928,7 @@ public class MainPOSInterface extends JFrame {
         });
 
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        String[] patientCustomerInformationSortOptions = {"FirstName", "LastName", "Phone", "Email", "PrescriptionDetails", "LastVisit", "NextAppointment", "Diagnosis"};
+        String[] patientCustomerInformationSortOptions = {"FirstName", "lastName", "Phone", "Email", "Prescription", "lastVisit", "NextAppointment", "Diagnosis"};
         addNewPatientCustomerButton = new JButton("Add Customer");
         customerInformationLabel = new JLabel("Customers Information");
         customerInformationLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
@@ -1010,7 +993,13 @@ public class MainPOSInterface extends JFrame {
         viewCustomerInformationDetailsView.add(customerpatientTableOnlypanel);
         searchTextFieldMouseListener(customerPatientsSearchField);
         customerPatientSortMethodCombo.addActionListener(e -> {
-            retrievedNaturalySortedTableData(customerPatientSortMethodCombo.getSelectedItem().toString(), "DESC", customerModel, "Customers Table", "Customers");
+            retrievedNaturalySortedTableData(customerPatientSortMethodCombo.getSelectedItem().toString(), customersAscDescCombo.getSelectedItem().toString(), customerModel, "Customers Table", "Customers");
+            customerPatientTotalLabel = new JLabel();
+            customerPatientTotalLabel.setText("Total:" + customerModel.getRowCount() + "  Record(s) Found");
+            repaint();
+        });
+        customersAscDescCombo.addActionListener(e -> {
+            retrievedNaturalySortedTableData(customerPatientSortMethodCombo.getSelectedItem().toString(), customersAscDescCombo.getSelectedItem().toString(), customerModel, "Customers Table", "Customers");
             customerPatientTotalLabel = new JLabel();
             customerPatientTotalLabel.setText("Total:" + customerModel.getRowCount() + "  Record(s) Found");
             repaint();
@@ -1025,26 +1014,29 @@ public class MainPOSInterface extends JFrame {
         });
         customerPatientsSearchField.addKeyListener(
                 new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                customersSearchText = customerPatientsSearchField.getText();
-            }
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        customersSearchText = customerPatientsSearchField.getText();
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                customersSearchText = customerPatientsSearchField.getText();
-            }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        customersSearchText = customerPatientsSearchField.getText();
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                retrieveDataBySearch("SELECT * FROM customers WHERE firstName LIKE '%" + customersSearchText + "%' OR lastName LIKE '%"
-                        + customersSearchText + "%' OR phone LIKE '%"
-                        + customersSearchText + "%' OR prescription LIKE '%" + customersSearchText + "%' OR lastVisit LIKE '%"
-                        + customersSearchText + "%' OR nextAppointment LIKE '%" + customersSearchText + "%' OR diagnosis LIKE '%"
-                        + customersSearchText + "%';", customerModel, "Customers");
-            }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        retrieveDataBySearch("SELECT * FROM customers WHERE firstName LIKE '%" + customersSearchText + "%' OR lastName LIKE '%"
+                                + customersSearchText + "%' OR phone LIKE '%"
+                                + customersSearchText + "%' OR prescription LIKE '%" + customersSearchText + "%' OR lastVisit LIKE '%"
+                                + customersSearchText + "%' OR nextAppointment LIKE '%" + customersSearchText + "%' OR diagnosis LIKE '%"
+                                + customersSearchText + "%';", customerModel, "Customers");
+                        // customerPatientTotalLabel = new JLabel();
+                        customerPatientTotalLabel.setText("Total:" + customerModel.getRowCount() + "  Record(s) Found");
+                        repaint();
+                    }
 
-        }
+                }
         );
         patientCustomerPrintButton.addActionListener(e -> printJTable(customerPatientTable, "Customer Records"));
         //New Order Screen
@@ -1310,8 +1302,6 @@ public class MainPOSInterface extends JFrame {
         //---------------------------------------------------------------------------------------------------------------------------------------------
         //Add task view properties code
         settingsPanel = new JPanel(null);
-        customersViewPanel = new JPanel(null);
-        shiftsViewPanel = new JPanel(null);
         // 
         viewUserPanel = new JPanel(null);
         taskListViewPanel = new JPanel(null);
@@ -1703,25 +1693,25 @@ public class MainPOSInterface extends JFrame {
         //check if password is already in use
         newEmployeepassword.addKeyListener(
                 new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword()))) {
-                    newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
-                    repaint();
-                    passwordAvailableLabel.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\white.PNG"));
-                    passwordAvailableLabel.setText("Password Already In Use");
-                    newEmployeeeditProfilePanel.add(passwordAvailableLabel);
-                    repaint();
-                } else if (!EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword()))) {
-                    newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
-                    repaint();
-                    passwordAvailableLabel.setText("");
-                    passwordAvailableLabel.setIcon(passwordStatusLabelIcon);
-                    newEmployeeeditProfilePanel.add(passwordAvailableLabel);
-                    repaint();
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        if (EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword()))) {
+                            newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
+                            repaint();
+                            passwordAvailableLabel.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\white.PNG"));
+                            passwordAvailableLabel.setText("Password Already In Use");
+                            newEmployeeeditProfilePanel.add(passwordAvailableLabel);
+                            repaint();
+                        } else if (!EmployeeDataTransaction.comparePasswordsForDuplicates(String.valueOf(newEmployeepassword.getPassword()))) {
+                            newEmployeeeditProfilePanel.remove(passwordAvailableLabel);
+                            repaint();
+                            passwordAvailableLabel.setText("");
+                            passwordAvailableLabel.setIcon(passwordStatusLabelIcon);
+                            newEmployeeeditProfilePanel.add(passwordAvailableLabel);
+                            repaint();
+                        }
+                    }
                 }
-            }
-        }
         );
 
         newEmployeeupdateUserDetailsButton.addActionListener(e -> {
@@ -1927,7 +1917,7 @@ public class MainPOSInterface extends JFrame {
 
                 //Confirm password
                 if ((String.valueOf(userPasswordField.getPassword())).equals(String.valueOf(confirmPasswordField.getPassword()))) {
-                    String userPass = String.valueOf(userPasswordField);
+                    String userPass = MD5Encryption.getCiphertext(String.valueOf(userPasswordField));
                     int insert_status = UsersInformationTransactions.addUserInformationToDB("232", firstNameField.getText(), lastNameField.getText(), phoneField.getText(), emailField.getText(), supervisorField.getText(), usersAccessLevelCombo.getSelectedItem().toString(), userPass);
                     switch (insert_status) {
                         case UsersInformationTransactions.PASSWORD_NOT_AVAILBLE:
@@ -1996,63 +1986,6 @@ public class MainPOSInterface extends JFrame {
         viewUserPanel.add(userListLabelPanel);
         viewUserPanel.add(UsersTablePanel);
         //---------------------------------------------------------------------------------------------------------------------------------------
-        customerTopPanel = new JPanel(null);
-        customersLabelPanel = new JPanel(null);
-        cutomersTablePanel = new JPanel(null);
-        addCustomersButton = new JButton("Add New Customer");
-        printCustomerInfoButton = new JButton("Print");
-        customersIconLabel = new JLabel();
-        customersLabel = new JLabel("Customer List");
-        numberOfCustomerRecordsLabel = new JLabel("Total: 12 Records Found");
-        filterCustomersButton = new JButton("Filter");
-        searchCustomersField = new JTextField("Search...");
-        sortCustomersByButton = new JButton("Sort By:");
-        String[] customersSortCategories = {"ID", "First Name", "Last Name", "Contact", "Email", "Customer Type", "Discount %", "Status"};
-        sorCustomestByCombo = new JComboBox<>(customersSortCategories);
-        customersTabelCustome = new JTable();
-        CustomeTableScrollPane = new JScrollPane(customersTabelCustome);
-        CustomeTableScrollPane.getViewport().setBackground(Color.WHITE);
-        addCustomersButton.setBounds(300, 40, 150, 30);
-        addCustomersButton.setBackground(Color.decode("#DC143C"));
-        sortCustomersByButton.setBackground(Color.decode("#1E90FF"));
-        filterCustomersButton.setBackground(Color.decode("#1E90FF"));
-        sorCustomestByCombo.setBackground(Color.WHITE);
-        printCustomerInfoButton.setBackground(Color.ORANGE);
-        printCustomerInfoButton.setBounds(460, 40, 150, 30);
-        customersIconLabel.setBounds(380, 5, 200, 50);
-        customersIconLabel.setIcon(new ImageIcon("C:\\Users\\user\\NetBeansProjects\\PharmacyPOS\\src\\appimages\\Screenshot (898).png"));
-        customersLabel.setBounds(450, 5, 100, 50);
-        numberOfCustomerRecordsLabel.setBounds(350, 5, 150, 30);
-        filterCustomersButton.setBounds(20, 40, 100, 35);
-        searchCustomersField.setBounds(125, 40, 200, 35);
-        sortCustomersByButton.setBounds(330, 40, 100, 35);
-        sorCustomestByCombo.setBounds(435, 40, 250, 35);
-        CustomeTableScrollPane.setBounds(20, 80, 950, 450);
-        customerTopPanel.setBounds(100, 0, 1000, 75);
-        customersLabelPanel.setBounds(100, 110, 1000, 50);
-        cutomersTablePanel.setBounds(100, 160, 1000, 550);
-        customerTopPanel.setBackground(Color.decode("#1E90FF"));
-        customersLabelPanel.setBorder(new LineBorder(Color.decode("#1E90FF")));
-        customersLabelPanel.setBackground(Color.decode("#193688"));
-        cutomersTablePanel.setBackground(Color.WHITE);
-        cutomersTablePanel.setBorder(new LineBorder(Color.decode("#1E90FF")));
-        CustomeTableScrollPane.setBorder(new LineBorder(Color.decode("#1E90FF")));
-        cutomersTablePanel.setBorder(new LineBorder(Color.decode("#1E90FF")));
-        customerTopPanel.add(addCustomersButton);
-        customerTopPanel.add(printCustomerInfoButton);
-        customersLabelPanel.add(customersIconLabel);
-        cutomersTablePanel.add(numberOfCustomerRecordsLabel);
-        cutomersTablePanel.add(filterCustomersButton);
-        cutomersTablePanel.add(searchCustomersField);
-        cutomersTablePanel.add(sortCustomersByButton);
-        cutomersTablePanel.add(sorCustomestByCombo);
-        cutomersTablePanel.add(CustomeTableScrollPane);
-        customersViewPanel.add(customerTopPanel);
-        customersViewPanel.add(customersLabelPanel);
-        customersViewPanel.add(cutomersTablePanel);
-        addFieldsFocusListener(sorCustomestByCombo);
-        addFieldsFocusListener(searchCustomersField);
-        searchTextFieldMouseListener(searchCustomersField);
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         String[] inventoryViewSortMethods = {"TimeRemaining", "Qty", "Reorder_Level", "Name", "SellPrice", "Category", "ID", "PurchasePrice", "Status"};
@@ -2133,26 +2066,26 @@ public class MainPOSInterface extends JFrame {
         searchTextFieldMouseListener(inventorySearchField);
 
         inventorySearchButton.addActionListener(e -> {
-            retrieveDataBySearch(inventorySearchField.getText(), stockTabelModel, "SELECT * FROM drugs WHERE category LIKE '%" + inventorySearchField.getText() + "%' OR name LIKE '%" + inventorySearchField.getText() + "%' OR ID LIKE '%" + inventorySearchField.getText() + "%';");
+            retrieveDataBySearch(inventorySearchField.getText(), stockTabelModel, "SELECT ID,name,purchasePrice,qty,sellPrice,Category,timeRemaining,Status,Details FROM drugs WHERE category LIKE '%" + inventorySearchField.getText() + "%' OR name LIKE '%" + inventorySearchField.getText() + "%' OR ID LIKE '%" + inventorySearchField.getText() + "%';");
         });
         inventorySearchField.addKeyListener(
                 new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                stockSearchText = inventorySearchField.getText();
-            }
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        stockSearchText = inventorySearchField.getText();
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                stockSearchText = inventorySearchField.getText();
-            }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        stockSearchText = inventorySearchField.getText();
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                retrieveDataBySearch("SELECT * FROM drugs WHERE category LIKE '%" + stockSearchText + "%' OR name LIKE '%" + stockSearchText + "%' OR ID LIKE '%" + stockSearchText + "%';", stockTabelModel, "Stock");
-            }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        retrieveDataBySearch("SELECT ID,name,purchasePrice,qty,sellPrice,Category,timeRemaining,Status,Details FROM drugs WHERE category LIKE '%" + stockSearchText + "%' OR name LIKE '%" + stockSearchText + "%' OR ID LIKE '%" + stockSearchText + "%' OR details LIKE '%" + stockSearchText + "%' OR status LIKE '%" + stockSearchText + "%' OR expDate LIKE '%" + stockSearchText + "%' OR sellPrice LIKE '%" + stockSearchText + "%' OR qty LIKE '%" + stockSearchText + "%' OR purchasePrice LIKE '%" + stockSearchText + "%';", stockTabelModel, "Stock");
+                    }
 
-        }
+                }
         );
 
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2227,8 +2160,8 @@ public class MainPOSInterface extends JFrame {
         pharmacyNameLabel = new JLabel(companyInformation.getCompanyInformation().get("name"));
         pharmacyNameLabel.setFont(new Font("STENCIL", Font.BOLD, 36));
         companyFooterLabel.setFont(new Font("OLD ENGLISH TEXT MT", Font.ITALIC, 30));
-        pharmacyNameLabel.setBounds(0, 0, 600, 80);
-        companyFooterLabel.setBounds(15, 80, 600, 80);
+        pharmacyNameLabel.setBounds(10, 200, 600, 80);
+        companyFooterLabel.setBounds(15, 330, 600, 80);
         clearClockInClockOutButton = new JButton("C\nL\nE\nA\nR");
         clockInButton = new JButton("Clock In");
         clockOutButton = new JButton("Clock Out");
@@ -2303,9 +2236,10 @@ public class MainPOSInterface extends JFrame {
         clockInOutPanel.add(passwordorIdPanel);
         clockInOutPanel.add(bottomButton);
         clockInOutPanel.add(zeroToTenButtonsPanel);
-        errorPanel.add(pharmacyNameLabel);
-        errorPanel.add(companyFooterLabel);
-        clockInAndOutViewPanel.add(errorPanel);
+        clockInAndOutViewPanel.add(pharmacyNameLabel);
+        clockInAndOutViewPanel.add(companyFooterLabel);
+       // errorPanel.add(backgroundImageLabel);
+       // clockInAndOutViewPanel.add(errorPanel);
         clockInAndOutViewPanel.add(clockInOutPanel);
         addTextAreaKeyListenerEvents(ClockInClockOutEmployeeIDField);
         clockOutButton.addActionListener(e -> {
@@ -2347,6 +2281,7 @@ public class MainPOSInterface extends JFrame {
                             selectCategoryCombo.setBounds(510, 25, 200, 40);
                             processPayMentsViewPanel.add(selectCategoryCombo);
                             categoriesComboBoxEvents();
+                            processPayMentsViewPanel.add(backgroundImageLabel);
                             repaint();
                             replaceRightComponentOnSplitPane(processPayMentsViewPanel);
                             break;
@@ -2516,29 +2451,29 @@ public class MainPOSInterface extends JFrame {
         inveicePanel.add(reportPanel);
         inveicePanel.add(reportPanelScrollPane);
         /* onClickBlueBorder(InvoicesearchField);
-        onClickBlueBorder(startDateField);
-        onClickBlueBorder(endDateField);*/
+         onClickBlueBorder(startDateField);
+         onClickBlueBorder(endDateField);*/
         searchTextFieldMouseListener(InvoicesearchField);
         InvoicesearchField.addKeyListener(
                 new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                salesSearchtext = InvoicesearchField.getText();
-            }
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        salesSearchtext = InvoicesearchField.getText();
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                salesSearchtext = InvoicesearchField.getText();
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        salesSearchtext = InvoicesearchField.getText();
 
-            }
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                retrieveDataBySearch("SELECT * FROM salesinvoice WHERE InvoiceID  LIKE '%" + salesSearchtext + "%' OR SaleDate   LIKE '%" + salesSearchtext + "%' OR SoldItem   LIKE '%" + salesSearchtext
-                        + "%' OR Qty LIKE '%" + salesSearchtext + "%' OR Total LIKE '%" + salesSearchtext + "%' OR PROFIT LIKE  '%" + salesSearchtext + "%' OR PayType LIKE '%" + salesSearchtext + "%' OR servedBy  LIKE '%" + salesSearchtext + "%' OR payType LIKE '%" + salesSearchtext + "%';", invoiceTableModel, "Sales");
-            }
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        retrieveDataBySearch("SELECT * FROM salesinvoice WHERE InvoiceID  LIKE '%" + salesSearchtext + "%' OR SaleDate   LIKE '%" + salesSearchtext + "%' OR SoldItem   LIKE '%" + salesSearchtext
+                                + "%' OR Qty LIKE '%" + salesSearchtext + "%' OR Total LIKE '%" + salesSearchtext + "%' OR PROFIT LIKE  '%" + salesSearchtext + "%' OR PayType LIKE '%" + salesSearchtext + "%' OR servedBy  LIKE '%" + salesSearchtext + "%' OR payType LIKE '%" + salesSearchtext + "%';", invoiceTableModel, "Sales");
+                    }
 
-        }
+                }
         );
         //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         ordersViewPanel = new JPanel(null);
@@ -2559,27 +2494,12 @@ public class MainPOSInterface extends JFrame {
         searchField2 = new JTextField();
         tempPanel = new JPanel();
         tempPanel.setBackground(Color.decode("#DC143C"));
-        popUpmenu = new JPopupMenu();
         printNotificationMenuItem = new JMenuItem("Print Notification");
         exitMenuItem = new JMenuItem("Exit");
         makeANewSaleMenuItem = new JMenuItem("New Sale");
         newNoticeMenuItem = new JMenuItem("New Notice");
         newUserMenuItem = new JMenuItem("New User");
         newEmployeeMenuItem = new JMenuItem("New Employee");
-        taskListViewMenuItem = new JMenuItem("Task List");
-        clientsMenuItem = new JMenuItem("Clients");
-        shiftMenuItem = new JMenuItem("Shifts");
-        toolBarsMenuItem = new JMenu("ToolBars");
-        standardSubMenItem = new JMenuItem("Standard");
-        hearderSubMenuItem = new JMenuItem("Headers");
-        themeMenuItem = new JMenu("Theme");
-        abcreThemeMenuItem = new JMenuItem("Abcre");
-        abcre2ThemeMenuItem = new JMenuItem("Abcre2");
-        aquaMenuItem = new JMenuItem("Aqua");
-        barcieMenuItem = new JMenuItem("Barcie");
-        classsicThemeMenuItem = new JMenuItem("Classic");
-        silverManueItem = new JMenuItem("Silver");
-        personalisationMenu = new JMenu("Personalisation");
         taskMenuItem = new JMenuItem("Task ");
         settingsMenuitem = new JMenuItem("Company Settings");
         logOutMenuItem = new JMenuItem("Log Out");
@@ -2590,9 +2510,6 @@ public class MainPOSInterface extends JFrame {
         purchasingMenu = new JMenu("Purchasing");
         configurationMenu = new JMenu("Configuration");
         helpMenu = new JMenu("Help");
-        salesRegisterMenu = new JMenu("Sales Register");
-        usersMenu = new JMenu("users");
-        itemsMenu = new JMenu("Items");
         customersMenu = new JMenu("Customers");
         //PrepareMenuItems --> itemsMenu
         addNewExpenseMenuItem = new JMenuItem("Record Expense");
@@ -2688,7 +2605,6 @@ public class MainPOSInterface extends JFrame {
         reports.setForeground(Color.WHITE);
         PointofSaleLabel.setForeground(Color.WHITE);
         itemsMenu.setForeground(Color.WHITE);
-        personalisationMenu.setForeground(Color.WHITE);
         fileMenu.setForeground(Color.WHITE);
         suppliersMenu.setForeground(Color.WHITE);
         salesMenu.setForeground(Color.WHITE);
@@ -2702,8 +2618,6 @@ public class MainPOSInterface extends JFrame {
         configurationMenu.setForeground(Color.WHITE);
         helpMenu.setForeground(Color.WHITE);
         reportsMainViewMenu.setForeground(Color.WHITE);
-        salesRegisterMenu.setForeground(Color.WHITE);
-        usersMenu.setForeground(Color.WHITE);
         itemsMenu.setForeground(Color.WHITE);
         customersMenu.setForeground(Color.WHITE);
         editMenu.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
@@ -2767,28 +2681,25 @@ public class MainPOSInterface extends JFrame {
         //CREATE MOUSE LISTNERS FOR THE MENUBAR 
         menuBar.addMouseListener(
                 new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent event) {
+                    @Override
+                    public void mouseExited(MouseEvent event) {
 
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
+                        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
 
-            @Override
-            public void mouseEntered(MouseEvent event) {
-                //menuBar.setBorder(new LineBorder(Color.decode("#F5F5F5"), 5));\
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
+                    @Override
+                    public void mouseEntered(MouseEvent event) {
+                        //menuBar.setBorder(new LineBorder(Color.decode("#F5F5F5"), 5));\
+                        setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    }
 
-        }
+                }
         );
-        usersMenu.add(Box.createHorizontalStrut(200));
-        usersMenu.add(addUsersmenuitem);
-        usersMenu.addSeparator();
-        usersMenu.add(manageUserMenuItem);
         customersMenu.add(Box.createHorizontalStrut(200));
         customersMenu.add(addCustomerMenuItem);
         customersMenu.addSeparator();
         customersMenu.add(manageCustomersMenuItem);
+        customersMenu.add(viewCustomerDetailsMenuItem);
         stockMenu.add(Box.createHorizontalStrut(200));
         stockMenu.add(addnewItemMenuItem);
         stockMenu.add(manageItemMenuItem);
@@ -2825,17 +2736,6 @@ public class MainPOSInterface extends JFrame {
         feedBackmenuItem.setEnabled(false);
         deactivateMenuItem.setEnabled(false);
         aboutMenuItem.setEnabled(false);
-        themeMenuItem.add(Box.createHorizontalStrut(200));
-        themeMenuItem.add(abcreThemeMenuItem);
-        themeMenuItem.add(abcre2ThemeMenuItem);
-        themeMenuItem.add(aquaMenuItem);
-        themeMenuItem.add(barcieMenuItem);
-        themeMenuItem.add(classsicThemeMenuItem);
-        themeMenuItem.add(silverManueItem);
-        toolBarsMenuItem.add(Box.createHorizontalStrut(200));
-        toolBarsMenuItem.add(standardSubMenItem);
-        toolBarsMenuItem.addSeparator();
-        toolBarsMenuItem.add(hearderSubMenuItem);
         //add menu Items to  ViewMenu
         //add menu Items to File Menu
 
@@ -2862,7 +2762,10 @@ public class MainPOSInterface extends JFrame {
         stockMenu.add(new JMenuItem("View Existing Item Categories"));
         //add menu Items to Inventory Menu
         //Set Accelerators for Action Menu MenuItems
-        viewReturnedGoodsMenuItem.addActionListener(e -> replaceRightComponentOnSplitPane(viewReturnsInterface));
+        viewReturnedGoodsMenuItem.addActionListener(e -> {
+            viewReturnsInterface.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(viewReturnsInterface);
+                });
         addNewDrugItemCategoryMenu.addActionListener(e -> new AddNewCategoryDialogBox(true));
         enterReturnedGoodsMenuItem.addActionListener(e -> new StoreReturnsTracking(true));
         addNewExpenseMenuItem.addActionListener(e -> new StoreExpensesTracking(true));
@@ -2875,10 +2778,11 @@ public class MainPOSInterface extends JFrame {
                 int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to Exit ?", "Alpha Pharmacy POS", JOptionPane.YES_NO_CANCEL_OPTION);
                 switch (option) {
                     case JOptionPane.YES_OPTION:
-                        List<JMenu> menues = Arrays.asList(editMenu, customersMenu, suppliersMenu, salesMenu, fileMenu, helpMenu, itemsMenu, stockMenu, customersMenu, usersMenu);
+                        List<JMenu> menues = Arrays.asList(editMenu, customersMenu, suppliersMenu, salesMenu, fileMenu, helpMenu, itemsMenu, stockMenu, customersMenu);
                         disableAllMenues(menues);
                         JPanel greyExitpanel = new JPanel();
                         greyExitpanel.setBackground(Color.red);
+                        greyExitpanel.add(backgroundImageLabel);
                         replaceRightComponentOnSplitPane(greyExitpanel);
                         try {
                             JOptionPane.showMessageDialog(null, "System is Exiting...");
@@ -2972,33 +2876,31 @@ public class MainPOSInterface extends JFrame {
         logOutMenu.addSeparator();
         logOutMenu.add(clockInClockOutMenuItem);
         /*reportsMainViewMenu.add(new JMenuItem("Sales"));
-        reportsMainViewMenu.add(new JMenuItem("Stock"));
-        reportsMainViewMenu.add(new JMenuItem("Suppliers"));
-        reportsMainViewMenu.add(new JMenuItem("Customers"));
-        reportsMainViewMenu.add(new JMenuItem("Employees"));
-        reportsMainViewMenu.add(new JMenuItem("Expenses"));
-        reportsMainViewMenu.add(new JMenuItem("Returns"));
-        reportsMainViewMenu.add(new JMenuItem("Overall DashBoard"));*/
+         reportsMainViewMenu.add(new JMenuItem("Stock"));
+         reportsMainViewMenu.add(new JMenuItem("Suppliers"));
+         reportsMainViewMenu.add(new JMenuItem("Customers"));
+         reportsMainViewMenu.add(new JMenuItem("Employees"));
+         reportsMainViewMenu.add(new JMenuItem("Expenses"));
+         reportsMainViewMenu.add(new JMenuItem("Returns"));
+         reportsMainViewMenu.add(new JMenuItem("Overall DashBoard"));*/
         suppliersMenu.add(Box.createHorizontalStrut(200));
         suppliersMenu.add(viewSuppliers);
         suppliersMenu.add(supplyTransactionsMenuItems);
         /*suppliersMenu.add(new JMenuItem("Add New Supplier"));
-        suppliersMenu.add(new JMenuItem("Pay Supply Debt"));
-        suppliersMenu.add(new JMenuItem("View Payment Status"));*/
+         suppliersMenu.add(new JMenuItem("Pay Supply Debt"));
+         suppliersMenu.add(new JMenuItem("View Payment Status"));*/
         menuBar.add(suppliersMenu);
         menuBar.add(reportsMainViewMenu);
         menuBar.add(helpMenu);
         menuBar.add(helpMenu);
-        menuBar.add(Box.createHorizontalStrut(400));
+        menuBar.add(Box.createHorizontalStrut(350));
         menuBar.add(logOutMenu);
         inventoryViewPanel.setBackground(Color.WHITE);
         menuBar.add(Box.createVerticalStrut(50));
         menuBar.setBackground(Color.decode("#1E90FF"));
-        popUpmenu.addSeparator();
-        popUpmenu.add(personalisationMenu);
-        popUpmenu.add(displaySettingsMenu);
         ordersViewPanel.setBackground(Color.WHITE);
         clockInAndOutViewPanel.setBackground(Color.WHITE);
+        clockInAndOutViewPanel.add(backgroundImageLabel);
         splitPane.setRightComponent(clockInAndOutViewPanel);
         splitPane.getLeftComponent().setBackground(Color.WHITE);
         logOutMenuItem.addActionListener((ActionEvent event) -> {
@@ -3021,6 +2923,7 @@ public class MainPOSInterface extends JFrame {
         supplyTransactionsMenuItems.addActionListener(e -> {
             SupplyTransactionsInformatiionView supplyTransactionsInformatiionView = new SupplyTransactionsInformatiionView();
             supplyTransactionsInformatiionView.paySupplierButton.setEnabled(false);
+            supplyTransactionsInformatiionView.add(backgroundImageLabel);
             replaceRightComponentOnSplitPane(supplyTransactionsInformatiionView);
 
         });
@@ -3030,6 +2933,7 @@ public class MainPOSInterface extends JFrame {
             retrieveTableData("SELECT ID,name,purchasePrice,qty,sellPrice,Category,timeRemaining,Status,Details FROM drugs;", stockTabelModel, "stocks Table", "drugs");
             inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
             splitPane.remove(splitPane.getRightComponent());
+            inventoryViewPanel.add(backgroundImageLabel);
             splitPane.setRightComponent(inventoryViewPanel);
             repaint();
         });
@@ -3040,6 +2944,7 @@ public class MainPOSInterface extends JFrame {
             splitPane.remove(splitPane.getRightComponent());
             repaint();
             suppliersInfoViewPanel.setBackground(Color.WHITE);
+            suppliersInfoViewPanel.add(backgroundImageLabel);
             splitPane.setRightComponent(suppliersInfoViewPanel);
         });
         // inveicePanel
@@ -3052,14 +2957,21 @@ public class MainPOSInterface extends JFrame {
             splitPane.remove(splitPane.getRightComponent());
             repaint();
             inveicePanel.setBackground(Color.WHITE);
+            inveicePanel.add(backgroundImageLabel);
             splitPane.setRightComponent(inveicePanel);
         });
+        viewCustomerDetailsMenuItem.addActionListener(e -> {
+            replaceRightComponentOnSplitPane(new CRMView());
+                });
 
         /*selectItemsCombo = new JComboBox<>(drugInventoryTransactions.getDrugNamesList("Other"));
-        selectItemsCombo.setBounds(720, 25, 200, 40);
-        processPayMentsViewPanel.add(selectItemsCombo);*/
+         selectItemsCombo.setBounds(720, 25, 200, 40);
+         processPayMentsViewPanel.add(selectItemsCombo);*/
         //Replce Right split pane views
-        newNoticeMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewTaskPanel));
+        newNoticeMenuItem.addActionListener(event -> {
+            addNewTaskPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewTaskPanel);
+                });
         taskMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewTaskPanel));
         makeANewSaleMenuItem.addActionListener(event -> {
 
@@ -3072,30 +2984,46 @@ public class MainPOSInterface extends JFrame {
             categoriesComboBoxEvents();
             processPayMentsViewPanel.add(selectItemsCombo);
             repaint();
+            
             replaceRightComponentOnSplitPane(processPayMentsViewPanel);
         });
         //DISPLLAY PURCHASES
-        purchaseViewMenuItem.addActionListener(e -> replaceRightComponentOnSplitPane(new PurchasesView()));
+        purchaseViewMenuItem.addActionListener(e -> {
+            
+            replaceRightComponentOnSplitPane(new PurchasesView());
+                });
 
-        itemsListMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(itemsManagementPanel));
+        itemsListMenuItem.addActionListener(event -> {
+            itemsManagementPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(itemsManagementPanel);
+                });
         clockInClockOutMenuItem.addActionListener(event -> {
             splitPane.remove(splitPane.getRightComponent());
             repaint();
             pharmacyNameLabel.setText(companyInformation.getCompanyInformation().get("name"));
             companyFooterLabel.setText(companyInformation.getCompanyInformation().get("footer"));
             clockInAndOutViewPanel.setBackground(Color.white);
+            clockInAndOutViewPanel.add(backgroundImageLabel);
             splitPane.setRightComponent(clockInAndOutViewPanel);
         });
-        taskListViewMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(taskListViewPanel));
-        manageUserMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(viewUserPanel));
-        newUserMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewUserPanelView));
-        addUsersmenuitem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewUserPanelView));
-        shiftMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(shiftsViewPanel));
+        manageUserMenuItem.addActionListener(event -> {
+            viewUserPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(viewUserPanel);
+                });
+        newUserMenuItem.addActionListener(event -> {
+            addNewUserPanelView.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewUserPanelView);
+        });
+        addUsersmenuitem.addActionListener(event -> {
+            addNewUserPanelView.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewUserPanelView);
+        });
         manageCustomersMenuItem.addActionListener(event -> {
             retrieveTableData("SELECT * FROM customers;", customerModel, "Customers Table", "Customers");
             customerPatientTotalLabel = new JLabel("Total:" + customerModel.getRowCount() + " Records Found");
             customerPatientTotalLabel.setBounds(450, 2, 200, 30);
             customerpatientTableOnlypanel.add(customerPatientTotalLabel);
+            viewCustomerInformationDetailsView.add(backgroundImageLabel);
             replaceRightComponentOnSplitPane(viewCustomerInformationDetailsView);
         });
 
@@ -3104,20 +3032,51 @@ public class MainPOSInterface extends JFrame {
             inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
             repaint();
         });
-        finalSortButton.addActionListener(e
-                -> {
+        ascendingDescendingCombo.addActionListener(e -> {
             retrievedNaturalySortedTableData(inventorySortMethodCombo.getSelectedItem().toString(), ascendingDescendingCombo.getSelectedItem().toString(), stockTabelModel, "stocks Table", "drugs");
             inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
             repaint();
-
         });
-        clientsMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(customersViewPanel));
-        settingsMenuitem.addActionListener(event -> replaceRightComponentOnSplitPane(settingsPanel));
-        inventoryMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(inventoryViewPanel));
-        printNotificationMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewTaskPanel));
-        newEmployeeMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewEmplyeeViewPanel));
-        invoiceMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(inveicePanel));
-        addCustomerMenuItem.addActionListener(event -> replaceRightComponentOnSplitPane(addNewPatientCustomerViewPanel));
+        finalSortButton.addActionListener(e
+                -> {
+
+                    retrievedNaturalySortedTableData(inventorySortMethodCombo.getSelectedItem().toString(), ascendingDescendingCombo.getSelectedItem().toString(), stockTabelModel, "stocks Table", "drugs");
+                    inventoryTotalLabel.setText("Total:" + stockTabelModel.getRowCount() + "  Records Found");
+                    repaint();
+
+                });
+        patientsAdminButton.addActionListener(event -> {
+            retrieveTableData("SELECT * FROM customers;", customerModel, "Customers Table", "Customers");
+            customerPatientTotalLabel = new JLabel("Total:" + customerModel.getRowCount() + " Records Found");
+            customerPatientTotalLabel.setBounds(450, 2, 200, 30);
+            viewCustomerInformationDetailsView.add(backgroundImageLabel);
+            customerpatientTableOnlypanel.add(customerPatientTotalLabel);
+            replaceRightComponentOnSplitPane(viewCustomerInformationDetailsView);
+        });
+        settingsMenuitem.addActionListener(event -> {
+            settingsPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(settingsPanel);
+        });
+        inventoryMenuItem.addActionListener(event -> {
+            inventoryViewPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(inventoryViewPanel);
+        });
+        printNotificationMenuItem.addActionListener(event -> {
+            addNewTaskPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewTaskPanel);
+        });
+        newEmployeeMenuItem.addActionListener(event -> {
+            addNewEmplyeeViewPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewEmplyeeViewPanel);
+        });
+        invoiceMenuItem.addActionListener(event -> {
+            inveicePanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(inveicePanel);
+        });
+        addCustomerMenuItem.addActionListener(event -> {
+            addNewPatientCustomerViewPanel.add(backgroundImageLabel);
+            replaceRightComponentOnSplitPane(addNewPatientCustomerViewPanel);
+        });
         //print reports
         inventoryViewsaddNewItemButton.addActionListener(event -> {
             new EditItemsDetailsFrame(true);
@@ -3125,7 +3084,10 @@ public class MainPOSInterface extends JFrame {
         expensesViewMenuItem.addActionListener(e -> {
             getExpenseDataFromDB();
             expenseTotalLabel.setText("Total: " + expensesTableModel.getRowCount() + " Records Found");
+            expensesViewMainPanel.add(backgroundImageLabel);
             replaceRightComponentOnSplitPane(expensesViewMainPanel);
+            expenseTotalLabel.setText("Total:" + expensesTableModel.getRowCount() + "  Records Found");
+            repaint();
 
         });
         inventoryPrintButton.addActionListener(event -> printJTable(inventoryItemsTable, "Inventory Report"));
@@ -3221,16 +3183,16 @@ public class MainPOSInterface extends JFrame {
         }
 
         List<JComponent> foregroundChangeComponentsz = Arrays.asList(
-                patientsAddPrescriptionDetailsButton, finalSortButton, sortButton, inventorySortByButton, sortCustomersByButton, empSortByButton, suppliersSortByButton, sortExpensesByButton, customerPatientSortByButton, newEmployeebrowseForImageButton, generateSaleReportsByDateButton, sortCustomersByButton, inventorySortByButton, sortButton, patientsUpdateInfoButton, addtaskButton, last30DaysReportsButton, addItemToSalesButton, customerPatientSortByButton, sortExpensesByButton, suppliersSortByButton, printButtonPay, patientsUpdateUserDetailsButton, newEmployeeupdateUserDetailsButton, updateUserDetailsButton, updateSettingButton, addMoreCashButton
+                patientsAddPrescriptionDetailsButton, finalSortButton, sortButton, inventorySortByButton, empSortByButton, suppliersSortByButton, sortExpensesByButton, customerPatientSortByButton, newEmployeebrowseForImageButton, generateSaleReportsByDateButton, inventorySortByButton, sortButton, patientsUpdateInfoButton, addtaskButton, last30DaysReportsButton, addItemToSalesButton, customerPatientSortByButton, sortExpensesByButton, suppliersSortByButton, printButtonPay, patientsUpdateUserDetailsButton, newEmployeeupdateUserDetailsButton, updateUserDetailsButton, updateSettingButton, addMoreCashButton
         );
         List<JComponent> redComponents = Arrays.asList(
                 clockOutButton, clearFieldButtonPay, clearClockInClockOutButton, posSettingsButton,
                 patientsUpdateInfoButton, patientsAdminButton, newEmployeeadminButton, newEmployeeupdateInfoButton,
                 updateInfooButton, adminButton, patientsUpdateInfoButton, patientsAdminButton, closeButtonPay,
-                deleteButtonPay, printCustomerInfoButton, inventoryPrintButton, printButton, employeeDataPrintButton,
+                deleteButtonPay, inventoryPrintButton, printButton, employeeDataPrintButton,
                 suppliersPrintButton, printExpensesButton, patientCustomerPrintButton
         );
-        getColorSwitchBackgroundEffect(redComponents,"#FF0000","#B22222");
+        getColorSwitchBackgroundEffect(redComponents, "#FF0000", "#B22222");
         getColorSwitchBackgroundEffect(foregroundChangeComponentsz, "#0BFF", "#1E90FF");
         setTableProperties(viewTables);
 
@@ -3254,25 +3216,25 @@ public class MainPOSInterface extends JFrame {
         }
     }
 
-    public final void onClickBlueBorder(final JComponent componentObject) {
+    public static final void onClickBlueBorder(final JComponent componentObject) {
         //Mouse Listener
         componentObject.addMouseListener(
                 new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
-            }
+                    @Override
+                    public void mouseClicked(MouseEvent event) {
+                        componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
+                    }
 
-            @Override
-            public void mouseReleased(MouseEvent event) {
-                componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
-            }
+                    @Override
+                    public void mouseReleased(MouseEvent event) {
+                        componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
+                    }
 
-            @Override
-            public void mousePressed(MouseEvent event) {
-                componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
-            }
-        }
+                    @Override
+                    public void mousePressed(MouseEvent event) {
+                        componentObject.setBorder(new LineBorder(Color.decode("#1E90FF"), 2));
+                    }
+                }
         );
     }
 
@@ -3322,39 +3284,39 @@ public class MainPOSInterface extends JFrame {
     public final void searchTextFieldMouseListener(final JTextField textFieldObject) {
         textFieldObject.addMouseListener(
                 new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                if (textFieldObject.getText().equals("Search...")) {
-                    textFieldObject.setText("");
-                    textFieldObject.setBackground(Color.BLUE);
-                }
+                    @Override
+                    public void mouseClicked(MouseEvent event) {
+                        if (textFieldObject.getText().equals("Search...")) {
+                            textFieldObject.setText("");
+                            textFieldObject.setBackground(Color.BLUE);
+                        }
 
-            }
+                    }
 
-            @Override
-            public void mouseExited(MouseEvent event) {
-                if (textFieldObject.getText().equals("")) {
-                    textFieldObject.setText("Search...");
-                    textFieldObject.setForeground(Color.BLACK);
-                }
-            }
+                    @Override
+                    public void mouseExited(MouseEvent event) {
+                        if (textFieldObject.getText().equals("")) {
+                            textFieldObject.setText("Search...");
+                            textFieldObject.setForeground(Color.BLACK);
+                        }
+                    }
 
-            @Override
-            public void mouseEntered(MouseEvent event) {
-                if (textFieldObject.getText().equals("Search...")) {
-                    textFieldObject.setText("");
-                    textFieldObject.setForeground(Color.BLUE);
-                }
-            }
+                    @Override
+                    public void mouseEntered(MouseEvent event) {
+                        if (textFieldObject.getText().equals("Search...")) {
+                            textFieldObject.setText("");
+                            textFieldObject.setForeground(Color.BLUE);
+                        }
+                    }
 
-            @Override
-            public void mousePressed(MouseEvent event) {
-                if (textFieldObject.getText().equals("Search...")) {
-                    textFieldObject.setText("");
-                    textFieldObject.setForeground(Color.BLUE);
+                    @Override
+                    public void mousePressed(MouseEvent event) {
+                        if (textFieldObject.getText().equals("Search...")) {
+                            textFieldObject.setText("");
+                            textFieldObject.setForeground(Color.BLUE);
+                        }
+                    }
                 }
-            }
-        }
         );
     }
 
@@ -3418,7 +3380,7 @@ public class MainPOSInterface extends JFrame {
         }
     }
 
-    public void replaceRightComponentOnSplitPane(JPanel newReplaceablePanel) {
+    public final void replaceRightComponentOnSplitPane(JPanel newReplaceablePanel) {
 
         splitPane.remove(splitPane.getRightComponent());
         repaint();
@@ -3460,7 +3422,6 @@ public class MainPOSInterface extends JFrame {
 
         try {
             currentTableObject.print(JTable.PrintMode.FIT_WIDTH, new MessageFormat(tableHeader), new MessageFormat(printDate + "  " + companyInformation.getCompanyInformation().get("name")));
-            JOptionPane.showMessageDialog(null, "Print succefull!");
         } catch (PrinterException e) {
             JOptionPane.showMessageDialog(null, "Unable To print:" + e.getMessage());
         }
@@ -3475,17 +3436,17 @@ public class MainPOSInterface extends JFrame {
     public final void changeCursorTypesForMenues(final JMenu menueObject) {
         menueObject.addMouseListener(
                 new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent event) {
+                    @Override
+                    public void mouseExited(MouseEvent event) {
 
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
+                        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
 
-            @Override
-            public void mouseEntered(MouseEvent event) {
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-        }
+                    @Override
+                    public void mouseEntered(MouseEvent event) {
+                        setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    }
+                }
         );
     }
 
@@ -3522,7 +3483,6 @@ public class MainPOSInterface extends JFrame {
 
             } catch (NullPointerException e) {
                 //do nothing
-                e.printStackTrace();
             }
 
         } catch (SQLException e) {
@@ -3571,49 +3531,49 @@ public class MainPOSInterface extends JFrame {
     public void makeFieldForegroundBlack(JTextField textField) {
         textField.addMouseListener(
                 new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                textField.setForeground(Color.BLACK);
-                setCursor(new Cursor(Cursor.TEXT_CURSOR));
-            }
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        textField.setForeground(Color.BLACK);
+                        setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                    }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                textField.setForeground(Color.BLACK);
-            }
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        textField.setForeground(Color.BLACK);
+                    }
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                textField.setForeground(Color.BLACK);
-            }
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        textField.setForeground(Color.BLACK);
+                    }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                textField.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-            }
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        textField.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+                    }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                textField.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-        }
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        textField.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+                        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
         );
     }
 
     public final void addTextAreaKeyListenerEvents(JTextArea textArea) {
         textArea.addKeyListener(
                 new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                textArea.setForeground(Color.decode("#1E90FF"));
-            }
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        textArea.setForeground(Color.decode("#1E90FF"));
+                    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                textArea.setForeground(Color.decode("#1E90FF"));
-            }
-        }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        textArea.setForeground(Color.decode("#1E90FF"));
+                    }
+                }
         );
     }
 
@@ -3629,9 +3589,9 @@ public class MainPOSInterface extends JFrame {
                 repaint();
             } else if (selectItemsCombo.getItemCount() <= 0) {
                 /*selectItemsCombo = new JComboBox<>(drugInventoryTransactions.getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()));
-                selectItemsCombo.setBounds(720, 25, 200, 40);
+                 selectItemsCombo.setBounds(720, 25, 200, 40);
                 
-                processPayMentsViewPanel.add(selectItemsCombo);*/
+                 processPayMentsViewPanel.add(selectItemsCombo);*/
                 Stream.of(drugInventoryTransactions.getDrugNamesList(selectCategoryCombo.getSelectedItem().toString()))
                         .forEach(drugName -> selectItemsCombo.addItem(drugName));
                 repaint();
@@ -3701,15 +3661,16 @@ public class MainPOSInterface extends JFrame {
     public static final void addFieldsFocusListener(final JComponent componentObject) {
         componentObject.addFocusListener(
                 new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent event) {
-                componentObject.setBorder(new LineBorder(Color.BLUE, 2));
-            }
-            @Override
-            public void focusLost(FocusEvent event) {
-                componentObject.setBorder(new LineBorder(Color.black, 1));
-            }
-        }
+                    @Override
+                    public void focusGained(FocusEvent event) {
+                        componentObject.setBorder(new LineBorder(Color.BLUE, 2));
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent event) {
+                        componentObject.setBorder(new LineBorder(Color.black, 1));
+                    }
+                }
         );
     }
 
@@ -3717,31 +3678,31 @@ public class MainPOSInterface extends JFrame {
     public final void animateGreypanels(final JPanel panelObject) {
         panelObject.addMouseListener(
                 new MouseListener() {
-            @Override
-            public void mouseEntered(MouseEvent event) {
-                panelObject.setBackground(Color.gray);
-            }
+                    @Override
+                    public void mouseEntered(MouseEvent event) {
+                        panelObject.setBackground(Color.gray);
+                    }
 
-            @Override
-            public void mouseExited(MouseEvent event) {
-                panelObject.setBackground(Color.lightGray);
-            }
+                    @Override
+                    public void mouseExited(MouseEvent event) {
+                        panelObject.setBackground(Color.lightGray);
+                    }
 
-            @Override
-            public void mousePressed(MouseEvent event) {
-                panelObject.setBackground(Color.gray);
-            }
+                    @Override
+                    public void mousePressed(MouseEvent event) {
+                        panelObject.setBackground(Color.gray);
+                    }
 
-            @Override
-            public void mouseReleased(MouseEvent event) {
-                panelObject.setBackground(Color.lightGray);
-            }
+                    @Override
+                    public void mouseReleased(MouseEvent event) {
+                        panelObject.setBackground(Color.lightGray);
+                    }
 
-            @Override
-            public void mouseClicked(MouseEvent event) {
-                panelObject.setBackground(Color.gray);
-            }
-        }
+                    @Override
+                    public void mouseClicked(MouseEvent event) {
+                        panelObject.setBackground(Color.gray);
+                    }
+                }
         );
     }
 
@@ -3752,47 +3713,49 @@ public class MainPOSInterface extends JFrame {
         textComponent.forEach(e -> {
             e.addKeyListener(
                     new KeyAdapter() {
-                @Override
-                public void keyReleased(KeyEvent e) {
+                        @Override
+                        public void keyReleased(KeyEvent e) {
 
-                    textComponent.stream().forEach((s) -> {
-                        if (!predicate.test(s.getText())) {
-                            s.setBorder(new LineBorder(Color.red));
-                            s.addFocusListener(
-                                    new FocusListener() {
-                                @Override
-                                public void focusGained(FocusEvent e) {
+                            textComponent.stream().forEach((s) -> {
+                                if (!predicate.test(s.getText())) {
                                     s.setBorder(new LineBorder(Color.red));
-                                }
-                                @Override
-                                public void focusLost(FocusEvent e) {
-                                    s.setBorder(new LineBorder(Color.red));
+                                    s.addFocusListener(
+                                            new FocusListener() {
+                                                @Override
+                                                public void focusGained(FocusEvent e) {
+                                                    s.setBorder(new LineBorder(Color.red));
+                                                }
+
+                                                @Override
+                                                public void focusLost(FocusEvent e) {
+                                                    s.setBorder(new LineBorder(Color.red));
+                                                }
+                                            });
+
+                                } else if (predicate.test(s.getText())) {
+                                    s.setBorder(new LineBorder(Color.blue));
+                                    invalidTextFields.remove(s);
+
+                                    s.addFocusListener(
+                                            new FocusListener() {
+                                                @Override
+                                                public void focusGained(FocusEvent e) {
+                                                    s.setBorder(new LineBorder(Color.decode("#1E90FF")));
+                                                }
+
+                                                @Override
+                                                public void focusLost(FocusEvent e) {
+                                                    s.setBorder(new LineBorder(Color.decode("#1E90FF")));
+                                                }
+
+                                            }
+                                    );
                                 }
                             });
 
-                        } else if (predicate.test(s.getText())) {
-                            s.setBorder(new LineBorder(Color.blue));
-                            invalidTextFields.remove(s);
-
-                            s.addFocusListener(
-                                    new FocusListener() {
-                                @Override
-                                public void focusGained(FocusEvent e) {
-                                    s.setBorder(new LineBorder(Color.decode("#1E90FF")));
-                                }
-                                @Override
-                                public void focusLost(FocusEvent e) {
-                                    s.setBorder(new LineBorder(Color.decode("#1E90FF")));
-                                }
-
-                            }
-                            );
                         }
-                    });
 
-                }
-
-            }
+                    }
             );
         });
 
@@ -3880,16 +3843,16 @@ public class MainPOSInterface extends JFrame {
                 .forEach((JComponent jComponent) -> {
                     jComponent.addMouseListener(
                             new MouseAdapter() {
-                        @Override
-                        public void mouseEntered(MouseEvent e) {
-                            jComponent.setBackground(Color.decode(colorCodeA));
-                        }
+                                @Override
+                                public void mouseEntered(MouseEvent e) {
+                                    jComponent.setBackground(Color.decode(colorCodeA));
+                                }
 
-                        @Override
-                        public void mouseExited(MouseEvent e) {
-                            jComponent.setBackground(Color.decode(colorCodeB));
-                        }
-                    }
+                                @Override
+                                public void mouseExited(MouseEvent e) {
+                                    jComponent.setBackground(Color.decode(colorCodeB));
+                                }
+                            }
                     );
                 });
     }
@@ -3905,18 +3868,18 @@ public class MainPOSInterface extends JFrame {
                     updatePayTextArea(button);
                     button.addMouseListener(
                             new MouseAdapter() {
-                        @Override
-                        public void mouseEntered(MouseEvent e) {
-                            button.setBackground(Color.decode("#1E90FF"));
-                            setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        }
+                                @Override
+                                public void mouseEntered(MouseEvent e) {
+                                    button.setBackground(Color.decode("#1E90FF"));
+                                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                }
 
-                        @Override
-                        public void mouseExited(MouseEvent e) {
-                            button.setBackground(Color.decode("#00BFF"));
-                            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                        }
-                    }
+                                @Override
+                                public void mouseExited(MouseEvent e) {
+                                    button.setBackground(Color.decode("#00BFF"));
+                                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                                }
+                            }
                     );
                 });
     }
@@ -3932,16 +3895,16 @@ public class MainPOSInterface extends JFrame {
             updateTextArea(button);
             button.addMouseListener(
                     new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    button.setBackground(Color.decode("#1E90FF"));
-                }
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            button.setBackground(Color.decode("#1E90FF"));
+                        }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    button.setBackground(Color.decode("#00BFF"));
-                }
-            }
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            button.setBackground(Color.decode("#00BFF"));
+                        }
+                    }
             );
         });
     }
@@ -3951,16 +3914,16 @@ public class MainPOSInterface extends JFrame {
                 .forEach(component -> {
                     component.addMouseListener(
                             new MouseAdapter() {
-                        @Override
-                        public void mouseEntered(MouseEvent e) {
-                            setCursor(new Cursor(Cursor.HAND_CURSOR));
-                        }
+                                @Override
+                                public void mouseEntered(MouseEvent e) {
+                                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                }
 
-                        @Override
-                        public void mouseExited(MouseEvent e) {
-                            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                        }
-                    }
+                                @Override
+                                public void mouseExited(MouseEvent e) {
+                                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                                }
+                            }
                     );
                 });
 
